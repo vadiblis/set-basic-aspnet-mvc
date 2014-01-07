@@ -26,7 +26,7 @@ namespace set_basic_aspnet_mvc.Controllers
         [HttpGet, AllowAnonymous]
         public ViewResult PasswordReset()
         {
-            return View();
+            return View(new PasswordResetModel());
         }
 
         [HttpGet, AllowAnonymous]
