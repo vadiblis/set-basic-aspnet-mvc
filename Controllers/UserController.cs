@@ -32,7 +32,7 @@ namespace set_basic_aspnet_mvc.Controllers
         [HttpGet, AllowAnonymous]
         public ViewResult PasswordChange(string email, string token)
         {
-            return View();
+            return View(new PasswordChangeModel());
         }
 
         [HttpGet]
