@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using set_basic_aspnet_mvc.Models;
 
 namespace set_basic_aspnet_mvc.Controllers
 {
@@ -13,7 +14,7 @@ namespace set_basic_aspnet_mvc.Controllers
         [HttpGet, AllowAnonymous]
         public ViewResult Login()
         {
-            return View();
+            return View(new LoginModel());
         }
 
         [HttpGet]

@@ -12,7 +12,8 @@ namespace set_basic_aspnet_mvc.Helpers
         {
             try
             {
-                return ((Dictionary<string, string>) HttpContext.Current.Application[string.Format("{0}_txt", Thread.CurrentThread.CurrentUICulture.Name)])[key];
+                var dictionary = (Dictionary<string, string>) HttpContext.Current.Application[string.Format("{0}_txt", Thread.CurrentThread.CurrentUICulture.Name)];
+                return  dictionary[key];
             }
             catch (Exception)
             {

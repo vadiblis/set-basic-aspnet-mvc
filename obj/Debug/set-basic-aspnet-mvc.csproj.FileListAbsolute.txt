@@ -20,3 +20,4 @@ D:\Work\set-basic-aspnet-mvc\bin\System.Web.WebPages.Deployment.xml
 D:\Work\set-basic-aspnet-mvc\bin\System.Web.WebPages.Razor.xml
 D:\Work\set-basic-aspnet-mvc\obj\Debug\set-basic-aspnet-mvc.dll
 D:\Work\set-basic-aspnet-mvc\obj\Debug\set-basic-aspnet-mvc.pdb
+D:\Work\set-basic-aspnet-mvc\obj\Debug\set-basic-aspnet-mvc.csprojResolveAssemblyReference.cache
