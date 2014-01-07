@@ -1,11 +1,19 @@
 ﻿using System.Web.Mvc;
 
+using set_basic_aspnet_mvc.Domain.Services;
 using set_basic_aspnet_mvc.Models;
 
 namespace set_basic_aspnet_mvc.Controllers
 {
     public class UserController : BaseController
     {
+        private readonly IFormsAuthenticationService _formsAuthenticationService;
+
+        public UserController(IFormsAuthenticationService formsAuthenticationService)
+        {
+            _formsAuthenticationService = formsAuthenticationService;
+        }
+
         [HttpGet, AllowAnonymous]
         public ViewResult New()
         {
@@ -21,6 +29,7 @@ namespace set_basic_aspnet_mvc.Controllers
         [HttpGet]
         public ViewResult Logout()
         {
+            _formsAuthenticationService.SignOut();
             return View();
         }
 

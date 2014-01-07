@@ -1,0 +1,26 @@
+﻿using System;
+
+namespace set_basic_aspnet_mvc.Domain.Entities
+{
+    public class BaseEntity
+    {
+        public BaseEntity()
+        {
+            CreatedAt = UpdatedAt = DateTime.Now;
+            IsDeleted = false;
+        }
+
+        public object Id { get; set; }
+
+        public int UpdatedBy { get; set; }
+        public DateTime UpdatedAt { get; set; }
+
+        public int CreatedBy { get; set; }
+        public DateTime CreatedAt { get; set; }
+
+        public int DeletedBy { get; set; }
+        public DateTime? DeletedAt { get; set; }
+
+        public bool IsDeleted { get; set; }
+    }
+}
