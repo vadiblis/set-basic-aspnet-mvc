@@ -28,6 +28,27 @@
                     <li><a href="/lang/change/en"><img src="/public/img/flag/en.png" alt="English" /></a></li>
                     <li><a href="/">@Html.LocalizationString("menu_home")</a></li>
                 </ul>
+                <ul class="nav navbar-nav navbar-right">
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="@GravatarHelper.GetGravatarURL(User.Identity.GetUserEmail(), 25)" alt="@User.Identity.GetUserFullName()" class="img-circle" />
+                                @User.Identity.GetUserFullName() <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/user/reset">@Html.LocalizationString("menu_user_reset")</a></li>
+                                <li><a href="/user/logout">@Html.LocalizationString("menu_user_logout")</a></li>
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+                        <li><a href="/user/login">@Html.LocalizationString("menu_user_login")</a></li>
+                        <li><a href="/user/new">@Html.LocalizationString("menu_user_sign_up")</a></li>
+                    }
+                </ul>
 
                 <ul class="nav navbar-nav navbar-right">
                     <li>
