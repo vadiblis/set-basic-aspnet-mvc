@@ -8,7 +8,7 @@ namespace set_basic_aspnet_mvc.Controllers
         [HttpGet, AllowAnonymous]
         public ViewResult New()
         {
-            return View();
+            return View(new LoginModel());
         }
 
         [HttpGet, AllowAnonymous]
