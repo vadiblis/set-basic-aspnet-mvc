@@ -10,7 +10,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{89A1DB
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "set-basic-aspnet-mvc", "src\set-basic-aspnet-mvc.csproj", "{B20BB66D-925B-4B59-98BF-686068920134}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "set-basic-aspnet-mvc", "src\client\set-basic-aspnet-mvc.csproj", "{B20BB66D-925B-4B59-98BF-686068920134}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "set-basic-aspnet-mvc.test", "src\test\set-basic-aspnet-mvc.test\set-basic-aspnet-mvc.test.csproj", "{09EA7D4B-64E3-4DB2-B5A3-C5DD44767E27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,6 +24,10 @@ Global
 		{B20BB66D-925B-4B59-98BF-686068920134}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B20BB66D-925B-4B59-98BF-686068920134}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B20BB66D-925B-4B59-98BF-686068920134}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09EA7D4B-64E3-4DB2-B5A3-C5DD44767E27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09EA7D4B-64E3-4DB2-B5A3-C5DD44767E27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09EA7D4B-64E3-4DB2-B5A3-C5DD44767E27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09EA7D4B-64E3-4DB2-B5A3-C5DD44767E27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
