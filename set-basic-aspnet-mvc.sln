@@ -3,16 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{89A1DB96-F2E0-4F7F-A7F9-9EEF96D4D4F3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "set-basic-aspnet-mvc", "src\client\set-basic-aspnet-mvc.csproj", "{B20BB66D-925B-4B59-98BF-686068920134}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "set-basic-aspnet-mvc.test", "src\test\set-basic-aspnet-mvc.test\set-basic-aspnet-mvc.test.csproj", "{09EA7D4B-64E3-4DB2-B5A3-C5DD44767E27}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C5D40049-A6C6-4E98-ADC4-20FA257640C0}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "set-basic-aspnet-mvc", "src\client\set-basic-aspnet-mvc.csproj", "{B20BB66D-925B-4B59-98BF-686068920134}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "set-basic-aspnet-mvc.test", "src\test\set-basic-aspnet-mvc.test\set-basic-aspnet-mvc.test.csproj", "{09EA7D4B-64E3-4DB2-B5A3-C5DD44767E27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
