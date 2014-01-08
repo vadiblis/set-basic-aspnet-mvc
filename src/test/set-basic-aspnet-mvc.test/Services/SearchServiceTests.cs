@@ -9,6 +9,7 @@ using NUnit.Framework;
 using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Domain.Repositories;
 using set_basic_aspnet_mvc.Domain.Services;
+using set_basic_aspnet_mvc.test.Builders;
 
 namespace set_basic_aspnet_mvc.test.Services
 {
@@ -33,8 +34,10 @@ namespace set_basic_aspnet_mvc.test.Services
              
 
             // Act
-            var searchService = new SearchService(userRepository.Object);
-            var user = await searchService.Query("");
+            var sut = new SearchServiceBuilder().WithUserService(userRepository.Object)
+                                                .Build();
+
+            var user = await sut.Query("test");
              
             // Assert
             //Assert.NotNull(user);
