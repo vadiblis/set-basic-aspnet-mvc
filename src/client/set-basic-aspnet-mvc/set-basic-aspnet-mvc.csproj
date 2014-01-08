@@ -40,6 +40,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AWSSDK">
+      <HintPath>..\..\..\packages\AWSSDK.2.0.4.1\lib\net45\AWSSDK.dll</HintPath>
+    </Reference>
     <Reference Include="BCrypt.Net">
       <HintPath>..\..\..\packages\BCrypt-Official.0.1.109\lib\BCrypt.Net.dll</HintPath>
     </Reference>
@@ -137,12 +140,16 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Domain\Entities\BaseEntity.cs" />
     <Compile Include="Domain\Entities\SetRole.cs" />
     <Compile Include="Domain\Entities\User.cs" />
     <Compile Include="Domain\Repositories\Repository.cs" />
     <Compile Include="Domain\Services\MessageService.cs" />
+    <Compile Include="Domain\Services\ReportService.cs" />
+    <Compile Include="Domain\Services\SearchService.cs" />
+    <Compile Include="Domain\Services\TagService.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
