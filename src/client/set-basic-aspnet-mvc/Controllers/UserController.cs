@@ -159,7 +159,7 @@ namespace set_basic_aspnet_mvc.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Detail(int id)
+        public async Task<ActionResult> Detail(int id=0)
         {
             if (id < 1)
             {
