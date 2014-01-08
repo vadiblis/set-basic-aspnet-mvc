@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 
-using set_basic_aspnet_mvc.Controllers;
-using set_basic_aspnet_mvc.Helpers;
+using set_basic_aspnet_mvc.Controllers; 
 using set_basic_aspnet_mvc.test.Builders;
 using set_basic_aspnet_mvc.test.TestHelpers;
 
@@ -16,7 +15,7 @@ namespace set_basic_aspnet_mvc.test.Controllers
             const string actionName = "Index";
 
             // Act
-            var sut = AdminControllerBuilder.Build();
+            var sut = new AdminControllerBuilder().Build();
             var view = sut.Index();
 
             // Assert
@@ -33,7 +32,7 @@ namespace set_basic_aspnet_mvc.test.Controllers
             const string actionName = "Users";
 
             // Act
-            var sut = AdminControllerBuilder.Build();
+            var sut = new AdminControllerBuilder().Build();
             var view = sut.Users();
 
             // Assert
