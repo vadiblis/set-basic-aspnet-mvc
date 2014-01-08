@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 
 using set_basic_aspnet_mvc.Domain.Services;
+using set_basic_aspnet_mvc.Models;
 
 namespace set_basic_aspnet_mvc.Controllers
 {
@@ -19,7 +18,7 @@ namespace set_basic_aspnet_mvc.Controllers
         [HttpGet, AllowAnonymous]
         public async Task<JsonResult> Query(string text)
         {
-            var model = new ResponseModel { Ok = false };
+            var model = new ResponseModel { IsOk = false };
             if (string.IsNullOrEmpty(text))
             {
                 return Json(model, JsonRequestBehavior.AllowGet);
@@ -32,7 +31,7 @@ namespace set_basic_aspnet_mvc.Controllers
             }
 
             model.Result = result;
-            model.Ok = true;
+            model.IsOk = true;
             return Json(model, JsonRequestBehavior.AllowGet);
         }
     }
