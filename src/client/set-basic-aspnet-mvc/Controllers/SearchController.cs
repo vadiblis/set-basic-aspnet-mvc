@@ -14,7 +14,7 @@ namespace set_basic_aspnet_mvc.Controllers
         {
             _searchService = searchService;
         }
-
+          
         [HttpGet, AllowAnonymous]
         public async Task<JsonResult> Query(string text)
         {
