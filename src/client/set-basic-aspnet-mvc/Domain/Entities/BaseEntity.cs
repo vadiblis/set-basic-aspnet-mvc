@@ -10,15 +10,15 @@ namespace set_basic_aspnet_mvc.Domain.Entities
             IsDeleted = false;
         }
 
-        public int Id { get; set; }
+        public long Id { get; set; }
 
-        public int UpdatedBy { get; set; }
+        public long UpdatedBy { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        public int CreatedBy { get; set; }
+        public long CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public int DeletedBy { get; set; }
+        public long DeletedBy { get; set; }
         public DateTime? DeletedAt { get; set; }
 
         public bool IsDeleted { get; set; }

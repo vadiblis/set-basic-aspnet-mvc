@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+
 using set_basic_aspnet_mvc.Domain.Entities;
 
 namespace set_basic_aspnet_mvc.Domain.Repositories
@@ -11,7 +12,7 @@ namespace set_basic_aspnet_mvc.Domain.Repositories
         TEntity Create(TEntity entity);
         TEntity Update(TEntity entity);
 
-        void SoftDelete(int id, int deletedBy);
+        void SoftDelete(long id, int deletedBy);
         void SoftDelete(Expression<Func<TEntity, bool>> where, int deletedBy);
 
         void Delete(long id);
@@ -19,7 +20,7 @@ namespace set_basic_aspnet_mvc.Domain.Repositories
 
         TEntity FindOne(Expression<Func<TEntity, bool>> where = null, params Expression<Func<TEntity, object>>[] includeProperties);
         IQueryable<TEntity> FindAll(Expression<Func<TEntity, bool>> where = null, params Expression<Func<TEntity, object>>[] includeProperties);
-        IQueryable<T> Set<T>() where T : class;
+        IQueryable AsQueryable();
 
         bool SaveChanges();
     }
