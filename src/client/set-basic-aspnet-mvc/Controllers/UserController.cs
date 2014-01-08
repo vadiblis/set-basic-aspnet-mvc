@@ -100,12 +100,35 @@ namespace set_basic_aspnet_mvc.Controllers
             var model = new PasswordResetModel();
             return View(model);
         }
+        [HttpPost, ValidateAntiForgeryToken, AllowAnonymous]
+        public ViewResult PasswordReset(PasswordResetModel model)
+        {
+
+            if (!model.IsValid())
+            {
+                model.Msg = LocalizationStringHtmlHelper.LocalizationString("please_check_the_fields_and_try_again");
+                return View(model);
+            }
+            return View(model);
+        }
 
         [HttpGet, AllowAnonymous]
         public ViewResult PasswordChange(string email, string token)
         {
             var model = new PasswordChangeModel();
             return View(model);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken, AllowAnonymous]
+        public async Task<ActionResult> PasswordChange(PasswordChangeModel model)
+        {
+
+            if (!model.IsValid())
+            {
+                model.Msg = LocalizationStringHtmlHelper.LocalizationString("please_check_the_fields_and_try_again");
+                return View(model);
+            }
+         return View(model);
         }
 
         [HttpGet]
@@ -125,7 +148,10 @@ namespace set_basic_aspnet_mvc.Controllers
             var model = new UserModel 
                         {
                             FullName= user.FullName,
-
+                            Email = user.Email,
+                            IsActive = user.IsActive,
+                            RoleName = user.RoleName,
+                            Language = user.Language
                         };            
 
             return View(model);

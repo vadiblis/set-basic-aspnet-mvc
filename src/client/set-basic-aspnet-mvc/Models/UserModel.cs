@@ -1,5 +1,5 @@
 ﻿using System;
-
+using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Helpers;
 
 namespace set_basic_aspnet_mvc.Models
@@ -10,7 +10,7 @@ namespace set_basic_aspnet_mvc.Models
         public string FullName { get; set; }
         public string Password { get; set; }
 
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string RoleName { get; set; }
         public string Language { get; set; }
         public bool IsActive { get; set; }
@@ -21,5 +21,19 @@ namespace set_basic_aspnet_mvc.Models
                    && !string.IsNullOrEmpty(FullName)
                    && Email.IsEmail();
         }
+        public static UserModel MapUserToUserModel(User user)
+        {
+            var model = new UserModel
+            {
+                Email = user.Email,
+                Id = user.Id,
+                FullName = user.FullName,
+                RoleName = user.RoleName,
+                Language = user.Language,
+                IsActive = user.IsActive,
+            };
+            return model;
+        }
+
     }
 }
