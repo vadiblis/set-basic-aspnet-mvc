@@ -34,7 +34,7 @@ namespace set_basic_aspnet_mvc.Controllers
         {
             if (!model.IsValid())
             {
-                model.Msg = LocalizationStringHtmlHelper.LocalizationString("please_check_the_fields_and_try_again");
+                SetPleaseTryAgain(model);
                 return View(model);
             }
 
@@ -43,7 +43,7 @@ namespace set_basic_aspnet_mvc.Controllers
             var userId = await _userService.Create(model.FullName, model.Email, model.Password, SetRole.User.Value, model.Language);
             if (userId == null)
             {
-                model.Msg = LocalizationStringHtmlHelper.LocalizationString("please_check_the_fields_and_try_again");
+                SetPleaseTryAgain(model);
                 return View(model);
             }
 
@@ -64,14 +64,14 @@ namespace set_basic_aspnet_mvc.Controllers
         {
             if (!model.IsValid())
             {
-                model.Msg = LocalizationStringHtmlHelper.LocalizationString("please_check_the_fields_and_try_again");
+                SetPleaseTryAgain(model);
                 return View(model);
             }
 
             var isAuthenticated = await _userService.Authenticate(model.Email, model.Password);
             if (!isAuthenticated)
             {
-                model.Msg = LocalizationStringHtmlHelper.LocalizationString("please_check_the_fields_and_try_again");
+                SetPleaseTryAgain(model);
                 return View(model);
             }
 
@@ -106,14 +106,14 @@ namespace set_basic_aspnet_mvc.Controllers
         {
             if (!model.IsValid())
             {
-                model.Msg = LocalizationStringHtmlHelper.LocalizationString("please_check_the_fields_and_try_again");
+                SetPleaseTryAgain(model);
                 return View(model);
             }
 
             var isValid = await _userService.RequestPasswordReset(model.Email);
             if (!isValid)
             {
-                model.Msg = LocalizationStringHtmlHelper.LocalizationString("please_check_the_fields_and_try_again");
+                SetPleaseTryAgain(model);
                 return View(model);
             }
 
