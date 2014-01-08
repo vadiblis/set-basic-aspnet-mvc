@@ -1,10 +1,14 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 using Moq;
 using NUnit.Framework;
 
 using set_basic_aspnet_mvc.Controllers;
+using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Domain.Services;
+using set_basic_aspnet_mvc.Models;
 using set_basic_aspnet_mvc.test.TestHelpers;
 using set_basic_aspnet_mvc.test.Builders;
 
@@ -34,6 +38,38 @@ namespace set_basic_aspnet_mvc.test.Controllers
                 sut.AssertAllowAnonymousAttribute(actionName);
             }
 
+
+            [Test]
+            public async void new_should_redirect_if_model_is_valid()
+            {
+                // Arrange
+                var validModel = new UserModel { FullName = "test", Password = "test", Email = "test@test.com", Language = Thread.CurrentThread.CurrentUICulture.Name };
+                var userService = new Mock<IUserService>();
+                userService.Setup(
+                    x =>
+                        x.Create(validModel.FullName, validModel.Email, validModel.Password, SetRole.User.Value,
+                            validModel.Language)).Returns(Task.FromResult<long?>(1));
+                var formsAuthenticationService = new Mock<IFormsAuthenticationService>();
+                formsAuthenticationService.Setup(x => x.SignIn(1, validModel.FullName, validModel.Email, true));
+
+                // Act
+                var sut = new UserControllerBuilder().WithUserService(userService.Object)
+                                                     .WithFormsAuthenticationService(formsAuthenticationService.Object)
+                                                     .Build();
+                var view = await sut.New(validModel) as RedirectResult;
+
+                // Assert
+                Assert.NotNull(view);
+                Assert.AreEqual(view.Url, "/user/detail");
+                Assert.IsInstanceOf(typeof(BaseController), sut);
+                userService.Verify(x => x.Create(validModel.FullName, validModel.Email, validModel.Password, SetRole.User.Value,
+                                validModel.Language), Times.Once);
+                //formsAuthenticationService.Verify(x => x.SignIn(1, validModel.FullName, validModel.Email, true), Times.Once);
+                sut.AssertPostAttribute("New", new[] { typeof(UserModel) });
+                sut.AssertAllowAnonymousAttribute("New", new[] { typeof(UserModel) });
+
+            }
+
             [Test]
             public void login_should_return_with_login_model()
             {
@@ -51,6 +87,41 @@ namespace set_basic_aspnet_mvc.test.Controllers
 
                 sut.AssertGetAttribute(actionName);
                 sut.AssertAllowAnonymousAttribute(actionName);
+            }
+
+            [Test]
+            public async void login_should_redirect_if_model_is_valid()
+            {
+                // Arrange
+                const int id = 1;
+                const string email = "test@test.com";
+                const string fullName = "test";
+                const string password = "pass";
+                var validModel = new LoginModel { Password = password, Email = email };
+
+                var userService = new Mock<IUserService>();
+                userService.Setup(x => x.Authenticate(email, password))
+                        .Returns(() => Task.FromResult(true));
+                userService.Setup(x => x.GetByEmail(email))
+                        .Returns(() => Task.FromResult(new User { Email = email }));
+
+                var formsAuthenticationService = new Mock<IFormsAuthenticationService>();
+                formsAuthenticationService.Setup(x => x.SignIn(id, fullName, email, true));
+
+                // Act
+                var sut = new UserControllerBuilder().WithUserService(userService.Object)
+                                                     .WithFormsAuthenticationService(formsAuthenticationService.Object)
+                                                     .Build();
+                var view = await sut.Login(validModel) as RedirectResult;
+
+                // Assert
+                Assert.NotNull(view);
+                Assert.AreEqual(view.Url, "/home/index");
+                Assert.IsInstanceOf(typeof(BaseController), sut);
+                userService.Verify(x => x.Authenticate(email, password), Times.Once);
+                formsAuthenticationService.Verify(x => x.SignIn(id, fullName, email, true), Times.Once);
+                sut.AssertPostAttribute("Login", new[] { typeof(LoginModel) });
+                sut.AssertAllowAnonymousAttribute("Login", new[] { typeof(LoginModel) });
             }
 
             [Test]
@@ -102,7 +173,7 @@ namespace set_basic_aspnet_mvc.test.Controllers
                 var sut = new UserControllerBuilder().Build();
                 var task = sut.PasswordChange("email@email.com", "token");
                 task.Wait();
-                var view =  task.Result as ViewResult;
+                var view = task.Result as ViewResult;
 
                 // Assert
                 Assert.NotNull(view);
