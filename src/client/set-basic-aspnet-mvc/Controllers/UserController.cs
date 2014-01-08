@@ -30,7 +30,7 @@ namespace set_basic_aspnet_mvc.Controllers
         [HttpGet]
         public ViewResult Logout()
         {
-            _formsAuthenticationService.SignOut();
+            _formsAuthenticationService.SignOut(); 
             return View();
         }
 
