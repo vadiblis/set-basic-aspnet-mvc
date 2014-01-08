@@ -10,7 +10,7 @@ namespace set_basic_aspnet_mvc.Domain.Entities
             IsDeleted = false;
         }
 
-        public object Id { get; set; }
+        public int Id { get; set; }
 
         public int UpdatedBy { get; set; }
         public DateTime UpdatedAt { get; set; }

@@ -40,6 +40,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BCrypt.Net">
+      <HintPath>..\..\..\packages\BCrypt-Official.0.1.109\lib\BCrypt.Net.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core">
       <HintPath>..\..\..\packages\Castle.Core.3.2.2\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
@@ -93,6 +96,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="LICENSE.txt" />
     <Content Include="packages.config" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\Users.cshtml" />
@@ -137,6 +141,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Domain\Entities\BaseEntity.cs" />
+    <Compile Include="Domain\Entities\SetRole.cs" />
     <Compile Include="Domain\Entities\User.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
