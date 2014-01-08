@@ -6,7 +6,7 @@ namespace set_basic_aspnet_mvc.Models
     {
         public string Email { get; set; }
 
-        public bool IsValid()
+        public override bool IsValid()
         {
             return Email.IsEmail();
         }

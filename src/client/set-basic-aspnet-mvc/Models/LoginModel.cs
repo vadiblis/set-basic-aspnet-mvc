@@ -8,7 +8,7 @@ namespace set_basic_aspnet_mvc.Models
         public string Password { get; set; }
         public string ReturnUrl { get; set; }
 
-        internal bool IsValid()
+        public override bool IsValid()
         {
             return !string.IsNullOrEmpty(Password)
                     && Email.IsEmail();

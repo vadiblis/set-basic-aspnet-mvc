@@ -16,7 +16,7 @@ namespace set_basic_aspnet_mvc.Models
         public string Language { get; set; }
         public bool IsActive { get; set; }
 
-        public bool IsValidNewUser()
+        public override bool IsValid()
         {
             return !string.IsNullOrEmpty(Password)
                    && !string.IsNullOrEmpty(FullName)

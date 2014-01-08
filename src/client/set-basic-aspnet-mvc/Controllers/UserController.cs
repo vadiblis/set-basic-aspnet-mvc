@@ -32,7 +32,7 @@ namespace set_basic_aspnet_mvc.Controllers
         [HttpPost, ValidateAntiForgeryToken, AllowAnonymous]
         public async Task<ActionResult> New(UserModel model)
         {
-            if (!model.IsValidNewUser())
+            if (!model.IsValid())
             {
                 model.Msg = LocalizationStringHtmlHelper.LocalizationString("please_check_the_fields_and_try_again");
                 return View(model);
