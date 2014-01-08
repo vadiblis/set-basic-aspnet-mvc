@@ -1,4 +1,5 @@
 ﻿using System;
+
 using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Helpers;
 
@@ -21,12 +22,13 @@ namespace set_basic_aspnet_mvc.Models
                    && !string.IsNullOrEmpty(FullName)
                    && Email.IsEmail();
         }
-        public static UserModel MapUserToUserModel(User user)
+
+        public static UserModel Map(User user)
         {
             var model = new UserModel
             {
-                Email = user.Email,
                 Id = user.Id,
+                Email = user.Email,                
                 FullName = user.FullName,
                 RoleName = user.RoleName,
                 Language = user.Language,

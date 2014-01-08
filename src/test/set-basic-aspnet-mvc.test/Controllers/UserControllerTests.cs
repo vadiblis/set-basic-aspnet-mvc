@@ -1,4 +1,6 @@
-﻿using Moq;
+﻿using System.Web.Mvc;
+
+using Moq;
 using NUnit.Framework;
 
 using set_basic_aspnet_mvc.Controllers;
@@ -98,7 +100,9 @@ namespace set_basic_aspnet_mvc.test.Controllers
 
                 // Act
                 var sut = new UserControllerBuilder().Build();
-                var view = sut.PasswordChange("email@email.com", "token");
+                var task = sut.PasswordChange("email@email.com", "token");
+                task.Wait();
+                var view =  task.Result as ViewResult;
 
                 // Assert
                 Assert.NotNull(view);

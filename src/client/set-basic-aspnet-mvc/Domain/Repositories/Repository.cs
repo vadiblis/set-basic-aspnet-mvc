@@ -1,14 +1,14 @@
-﻿using set_basic_aspnet_mvc.Domain.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+
+using set_basic_aspnet_mvc.Domain.Entities;
 
 namespace set_basic_aspnet_mvc.Domain.Repositories
 {
     public class Repository<T> : IRepository<T> where T : BaseEntity
     {
-
         public T Create(T entity)
         {
             throw new NotImplementedException();
