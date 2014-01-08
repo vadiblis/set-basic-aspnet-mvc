@@ -1,8 +1,10 @@
 ﻿using Moq;
 using NUnit.Framework;
+
 using set_basic_aspnet_mvc.Controllers;
 using set_basic_aspnet_mvc.Domain.Services;
 using set_basic_aspnet_mvc.test.TestHelpers;
+using set_basic_aspnet_mvc.test.Builders;
 
 namespace set_basic_aspnet_mvc.test.Controllers
 {
@@ -18,7 +20,7 @@ namespace set_basic_aspnet_mvc.test.Controllers
                 const string actionName = "New";
 
                 // Act
-                var sut = new UserController(null);
+                var sut = new UserControllerBuilder().Build();
                 var view = sut.New();
 
                 // Assert
@@ -37,7 +39,7 @@ namespace set_basic_aspnet_mvc.test.Controllers
                 const string actionName = "Login";
 
                 // Act
-                var sut = new UserController(null);
+                var sut = new UserControllerBuilder().Build();
                 var view = sut.Login();
 
                 // Assert
@@ -58,7 +60,8 @@ namespace set_basic_aspnet_mvc.test.Controllers
                 formsAuthenticationService.Setup(x => x.SignOut());
 
                 // Act
-                var sut = new UserController(formsAuthenticationService.Object);
+                var sut = new UserControllerBuilder().WithFormsAuthenticationService(formsAuthenticationService.Object)
+                                                     .Build();
                 var view = sut.Logout();
 
                 // Assert
@@ -75,7 +78,7 @@ namespace set_basic_aspnet_mvc.test.Controllers
                 const string actionName = "PasswordReset";
 
                 // Act
-                var sut = new UserController(null);
+                var sut = new UserControllerBuilder().Build();
                 var view = sut.PasswordReset();
 
                 // Assert
@@ -94,8 +97,8 @@ namespace set_basic_aspnet_mvc.test.Controllers
                 const string actionName = "PasswordChange";
 
                 // Act
-                var sut = new UserController(null);
-                var view = sut.PasswordChange("email", "token");
+                var sut = new UserControllerBuilder().Build();
+                var view = sut.PasswordChange("email@email.com", "token");
 
                 // Assert
                 Assert.NotNull(view);

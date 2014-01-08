@@ -1,11 +1,13 @@
 ﻿using NUnit.Framework;
+
 using set_basic_aspnet_mvc.Controllers;
 using set_basic_aspnet_mvc.Helpers;
+using set_basic_aspnet_mvc.test.Builders;
 using set_basic_aspnet_mvc.test.TestHelpers;
 
 namespace set_basic_aspnet_mvc.test.Controllers
 {
-    public class AdminControllerTests 
+    public class AdminControllerTests
     {
         [Test]
         public void index_should_return_view()
@@ -14,14 +16,14 @@ namespace set_basic_aspnet_mvc.test.Controllers
             const string actionName = "Index";
 
             // Act
-            var sut = new AdminController();
+            var sut = AdminControllerBuilder.Build();
             var view = sut.Index();
 
             // Assert
             Assert.NotNull(view);
             Assert.IsInstanceOf<BaseController>(sut);
 
-            sut.AssertGetAttribute(actionName); 
+            sut.AssertGetAttribute(actionName);
         }
 
         [Test]
@@ -29,17 +31,16 @@ namespace set_basic_aspnet_mvc.test.Controllers
         {
             // Arrange
             const string actionName = "Users";
-            const int id = 1;
 
             // Act
-            var sut = new AdminController();
-            var view = sut.Users(id);
+            var sut = AdminControllerBuilder.Build();
+            var view = sut.Users();
 
             // Assert
             Assert.NotNull(view);
             Assert.IsInstanceOf<BaseController>(sut);
 
-            sut.AssertGetAttribute(actionName,new []{typeof(int)});
+            sut.AssertGetAttribute(actionName, new[] { typeof(int) });
         }
     }
 }
