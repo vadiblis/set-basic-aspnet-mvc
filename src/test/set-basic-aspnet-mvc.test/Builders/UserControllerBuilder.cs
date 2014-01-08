@@ -47,13 +47,15 @@ namespace set_basic_aspnet_mvc.test.Builders
             var httpResponse = new Mock<HttpResponseBase>();
             var user = new Mock<IPrincipal>();
             var currentUser = new Mock<IIdentity>();
-             
+
             controllerContext.Setup(x => x.HttpContext).Returns(httpContext.Object);
             httpContext.Setup(x => x.Request).Returns(httpRequest.Object);
-            httpContext.Setup(x => x.Response).Returns(httpResponse.Object);
+            httpContext.Setup(x => x.Response).Returns(httpResponse.Object);            
             httpContext.Setup(x => x.User).Returns(user.Object);
             user.Setup(x => x.Identity).Returns(currentUser.Object);
             currentUser.Setup(x => x.IsAuthenticated).Returns(true);
+
+            httpResponse.Setup(x => x.SetCookie(It.IsAny<HttpCookie>()));
 
             sut.ControllerContext = controllerContext.Object;
             return sut;
@@ -62,6 +64,6 @@ namespace set_basic_aspnet_mvc.test.Builders
         internal UserController Build()
         {
             return new UserController(_userService, _formAuthenticationService);
-        } 
+        }
     }
 }

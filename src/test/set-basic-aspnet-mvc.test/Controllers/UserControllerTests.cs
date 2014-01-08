@@ -51,7 +51,7 @@ namespace set_basic_aspnet_mvc.test.Controllers
                            .Returns(Task.FromResult<long?>(1));
 
                 var formsAuthenticationService = new Mock<IFormsAuthenticationService>();
-                formsAuthenticationService.Setup(x => x.SignIn(validModel.Id, validModel.FullName, validModel.Email, true));
+                formsAuthenticationService.Setup(x => x.SignIn(validModel.Id, validModel.FullName, validModel.Email, SetRole.User.Value, true));
 
                 // Act
                 var sut = new UserControllerBuilder().WithUserService(userService.Object)
@@ -68,7 +68,7 @@ namespace set_basic_aspnet_mvc.test.Controllers
                 sut.AssertAllowAnonymousAttribute(actionName, new[] { typeof(UserModel) });
 
                 userService.Verify(x => x.Create(validModel.FullName, validModel.Email, validModel.Password, SetRole.User.Value, validModel.Language), Times.Once);
-                formsAuthenticationService.Verify(x => x.SignIn(validModel.Id, validModel.FullName, validModel.Email, true), Times.Once);
+                formsAuthenticationService.Verify(x => x.SignIn(validModel.Id, validModel.FullName, validModel.Email, SetRole.User.Value, true), Times.Once);
             }
 
             [Test]
@@ -108,7 +108,7 @@ namespace set_basic_aspnet_mvc.test.Controllers
                         .Returns(() => Task.FromResult(new User { Email = email }));
 
                 var formsAuthenticationService = new Mock<IFormsAuthenticationService>();
-                formsAuthenticationService.Setup(x => x.SignIn(id, fullName, email, true));
+                formsAuthenticationService.Setup(x => x.SignIn(id, fullName, email, SetRole.User.Value, true));
 
                 // Act
                 var sut = new UserControllerBuilder().WithUserService(userService.Object)
@@ -122,7 +122,7 @@ namespace set_basic_aspnet_mvc.test.Controllers
                 Assert.IsInstanceOf(typeof(BaseController), sut);
 
                 userService.Verify(x => x.Authenticate(email, password), Times.Once);
-                formsAuthenticationService.Verify(x => x.SignIn(id, fullName, email, true), Times.Once);
+                formsAuthenticationService.Verify(x => x.SignIn(id, fullName, email, SetRole.User.Value, true), Times.Once);
 
                 sut.AssertPostAttribute(actionName, new[] { typeof(LoginModel) });
                 sut.AssertAllowAnonymousAttribute(actionName, new[] { typeof(LoginModel) });

@@ -47,7 +47,7 @@ namespace set_basic_aspnet_mvc.Controllers
                 return View(model);
             }
 
-            _formsAuthenticationService.SignIn(userId, model.FullName, model.Email, true);
+            _formsAuthenticationService.SignIn(userId.Value, model.FullName, model.Email, SetRole.User.Value, true);
 
             return Redirect("/user/detail");
         }
@@ -77,7 +77,7 @@ namespace set_basic_aspnet_mvc.Controllers
 
             var user = await _userService.GetByEmail(model.Email);
 
-            _formsAuthenticationService.SignIn(user.Id, user.FullName, user.Email, true);
+            _formsAuthenticationService.SignIn(user.Id, user.FullName, user.Email, user.RoleId, true);
 
             if (!string.IsNullOrEmpty(model.ReturnUrl))
             {
@@ -139,7 +139,7 @@ namespace set_basic_aspnet_mvc.Controllers
         {
             if (!model.IsValid())
             {
-                return RedirectToHome();  
+                return RedirectToHome();
             }
 
             var isValid = await _userService.IsPasswordResetRequestValid(model.Email, model.Token);
@@ -159,7 +159,7 @@ namespace set_basic_aspnet_mvc.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Detail(int id=0)
+        public async Task<ActionResult> Detail(long id = 0)
         {
             if (id < 1)
             {

@@ -15,14 +15,14 @@ namespace set_basic_aspnet_mvc.Domain.Services
 
         Task<long?> Create(string fullName, string email, string password, int roleId, string language);
         Task<bool> Authenticate(string email, string password);
-        Task<bool> ChangeStatus(int userId, int updatedBy, bool isActive);
+        Task<bool> ChangeStatus(long userId, long updatedBy, bool isActive);
 
         Task<bool> IsEmailExists(string email);
         Task<bool> RequestPasswordReset(string email);
         Task<bool> IsPasswordResetRequestValid(string email, string token);
         Task<bool> ChangePassword(string email, string token, string password);
 
-        Task<User> Get(int id);
+        Task<User> Get(long id);
         Task<User> GetByEmail(string email);
     }
 
@@ -89,7 +89,7 @@ namespace set_basic_aspnet_mvc.Domain.Services
             return Task.FromResult(result);
         }
 
-        public Task<bool> ChangeStatus(int userId, int updatedBy, bool isActive)
+        public Task<bool> ChangeStatus(long userId, long updatedBy, bool isActive)
         {
             if (userId < 1 || updatedBy < 1) return Task.FromResult(false);
 
@@ -109,7 +109,7 @@ namespace set_basic_aspnet_mvc.Domain.Services
             return Task.FromResult(true);
         }
 
-        public Task<User> Get(int id)
+        public Task<User> Get(long id)
         {
             var user = _userRepo.FindOne(x => x.Id == id);
             return Task.FromResult(user);
