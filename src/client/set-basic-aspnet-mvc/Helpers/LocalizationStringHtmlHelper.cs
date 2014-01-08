@@ -20,5 +20,10 @@ namespace set_basic_aspnet_mvc.Helpers
                 return key;
             }
         }
+
+        public static string LocalizationString(string key)
+        {
+            return LocalizationString(null, key);
+        }
     }
 }

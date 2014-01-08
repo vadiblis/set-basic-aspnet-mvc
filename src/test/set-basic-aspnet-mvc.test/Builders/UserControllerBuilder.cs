@@ -12,10 +12,12 @@ namespace set_basic_aspnet_mvc.test.Builders
     public class UserControllerBuilder
     {
         private IFormsAuthenticationService _formAuthenticationService;
+        private IUserService _userService;
 
         public UserControllerBuilder()
         {
             _formAuthenticationService = null;
+            _userService = null;
         }
 
         internal UserControllerBuilder WithFormsAuthenticationService(IFormsAuthenticationService formAuthenticationService)
@@ -24,9 +26,15 @@ namespace set_basic_aspnet_mvc.test.Builders
             return this;
         }
 
+        internal UserControllerBuilder WithUserService(IUserService userService)
+        {
+            _userService = userService;
+            return this;
+        }
+
         internal UserController Build()
         {
-            return new UserController(_formAuthenticationService);
+            return new UserController(_userService, _formAuthenticationService);
         }
     }
 }
