@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 using set_basic_aspnet_mvc.Domain.Services;
@@ -9,35 +10,95 @@ namespace set_basic_aspnet_mvc.Controllers
     public class UserController : BaseController
     {
         private readonly IFormsAuthenticationService _formsAuthenticationService;
+        private readonly IUserService _userService;
 
-        public UserController(IFormsAuthenticationService formsAuthenticationService)
+        public UserController(IUserService userService, IFormsAuthenticationService formsAuthenticationService)
         {
+            _userService = userService;
             _formsAuthenticationService = formsAuthenticationService;
         }
 
         [HttpGet, AllowAnonymous]
-        public ViewResult New()
+        public ActionResult New()
         {
-            return View(new LoginModel());
+            var model = new UserModel();
+            return View(model);
         }
 
-        [HttpGet, AllowAnonymous]
-        public ViewResult Login()
+        [HttpPost, ValidateAntiForgeryToken, AllowAnonymous]
+        public async Task<ActionResult> New(UserModel model)
         {
-            return View(new LoginModel());
+            if (!model.IsValidNewUser())
+            {
+                model.Msg = "bir sorun oluştu";
+                return View(model);
+            }
+
+            model.Language = Thread.CurrentThread.CurrentUICulture.Name;
+            var userId = await _userService.Create(model.FullName,model.Email,model.Password,model.RoleId,model.Language);
+            if (userId == null)
+            {
+                model.Msg = "bir sorun oluştu";
+                return View(model);
+            }
+
+            return Redirect("/user/detail");
+        }
+
+
+        [HttpGet, AllowAnonymous]
+        public ActionResult Login()
+        {
+            var model = new LoginModel();
+
+            return View(model);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken, AllowAnonymous]
+        public async Task<ActionResult> Login(LoginModel model)
+        {
+
+            if (!model.IsValid())
+            {
+                model.Msg = "bir sorun oluştu";
+                return View(model);
+            }
+
+            var authenticated = await _userService.Authenticate(model.Email, model.Password);
+            if (!authenticated)
+            {
+                model.Msg = "bir sorun oluştu";
+                return View(model);
+            }
+
+            var user = await _userService.GetByEmail(model.Email);
+            _formsAuthenticationService.SignIn(string.Format("{0}|{1}|{2}", user.Id, user.FullName, user.Email), true);
+
+            if (!string.IsNullOrEmpty(model.ReturnUrl))
+            {
+                return Redirect(model.ReturnUrl);
+            }
+
+            return Redirect("/user/detail");
         }
 
         [HttpGet]
-        public ViewResult Logout()
+        public ActionResult Logout()
         {
             _formsAuthenticationService.SignOut();
-            return View();
+            return RedirectToHome();
         }
-
+    
         [HttpGet, AllowAnonymous]
-        public ViewResult PasswordReset()
+        public ActionResult PasswordReset()
         {
-            return View(new PasswordResetModel());
+       
+            var model = new PasswordResetModel()
+            {
+                Email = "dev@test.com"
+            };
+
+            return View(model);
         }
 
         [HttpGet, AllowAnonymous]
