@@ -71,23 +71,120 @@ namespace set_basic_aspnet_mvc.test.Services
             Assert.AreEqual(user.Email, email);
             userRepository.Verify(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>()), Times.Once);
         }
+
         [Test]
-        public async void change_status_test()
+        public void change_status_test()
         {
             // Arrange
-            const int userId = 8;
-            const int updatedBy = 1;
-            bool isActive = true;
+            const long userId = 8;
+            const long updatedBy = 1;
+            const bool isActive = true;
             var userRepository = new Mock<IRepository<User>>();
-            userRepository.Setup(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>())).Returns(new User {Id= userId});
+            userRepository.Setup(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>())).Returns(new User { Id = userId });
 
             // Act
             var userService = new UserService(userRepository.Object);
-            var user = userService.ChangeStatus(userId,updatedBy,isActive);
+            var user = userService.ChangeStatus(userId, updatedBy, isActive);
+
+            // Assert
+            Assert.NotNull(user);
+            userRepository.Verify(x => x.Update(It.IsAny<User>()), Times.Once);
+            userRepository.Verify(x => x.SaveChanges(), Times.AtLeastOnce);
+        }
+
+        [Test]
+        public async void get_should_return_user()
+        {
+            // Arrange
+            const long id = 2;
+
+            var userRepository = new Mock<IRepository<User>>();
+            userRepository.Setup(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>())).Returns(new User { Id = id });
+
+            // Act
+            var userService = new UserService(userRepository.Object);
+            var user = await userService.Get(id);
 
             // Assert
             Assert.NotNull(user);
             userRepository.Verify(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>()), Times.Once);
+        }
+
+        [Test]
+        public void change_password_test()
+        {
+            // Arrange
+            const string email = "test@test.com";
+            const string token = "test";
+            const string password = "password";
+
+            var userRepository = new Mock<IRepository<User>>();
+            userRepository.Setup(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>())).Returns(new User { Email = email, PasswordResetToken = token, PasswordHash = BCrypt.Net.BCrypt.HashPassword(password), PasswordResetRequestedAt = DateTime.Now });
+
+            // Act
+            var userService = new UserService(userRepository.Object);
+            var user = userService.ChangePassword(email, token, password);
+
+            // Assert
+            Assert.NotNull(user);
+            userRepository.Verify(x => x.Update(It.IsAny<User>()), Times.Once);
+            userRepository.Verify(x => x.SaveChanges(), Times.AtLeastOnce);
+        }
+
+        [Test]
+        public void request_password_reset_test()
+        {
+            // Arrange
+            const string email = "test@test.com";
+            const string token = "test";
+            const long userId = 1;
+            const string password = "password";
+
+            var userRepository = new Mock<IRepository<User>>();
+            userRepository.Setup(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>())).Returns(new User { Email = email, PasswordResetToken = token, PasswordResetRequestedAt = null, UpdatedAt = DateTime.Now, UpdatedBy = userId });
+
+            // Act
+            var userService = new UserService(userRepository.Object);
+            var user = userService.RequestPasswordReset(email);
+
+            // Assert
+            Assert.NotNull(user);
+            userRepository.Verify(x => x.Update(It.IsAny<User>()), Times.Once);
+            userRepository.Verify(x => x.SaveChanges(), Times.AtLeastOnce);
+        }
+
+        [Test]
+        public void is_password_reset_request_valid_test()
+        {
+            // Arrange
+            const string email = "test@test.com";
+            const string token = "test";
+
+            var userRepository = new Mock<IRepository<User>>();
+            userRepository.Setup(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>())).Returns(new User { Email = email, PasswordResetToken = token});
+
+            // Act
+            var userService = new UserService(userRepository.Object);
+            var user = userService.IsPasswordResetRequestValid(email,token);
+
+            // Assert
+            Assert.NotNull(user);
+        }
+
+        [Test]
+        public async void is_email_exists_test()
+        {
+            // Arrange
+            const string email ="test@test.com";
+
+            var userRepository = new Mock<IRepository<User>>();
+          //Emin Değilim..
+            // Act
+            var userService = new UserService(userRepository.Object);
+            var user = await userService.IsEmailExists(email);
+
+            // Assert
+            Assert.NotNull(user);
         }
     }
 }

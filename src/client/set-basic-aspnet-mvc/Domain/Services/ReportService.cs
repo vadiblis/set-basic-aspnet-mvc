@@ -8,12 +8,12 @@ namespace set_basic_aspnet_mvc.Domain.Services
 {
     public interface IReportService
     {
-        Task<int> GetTotalUserCount(int count);
+        Task<int> GetTotalUserCount();
     }
 
     public class ReportService : IReportService
     {
-        public Task<int> GetTotalUserCount(int count)
+        public Task<int> GetTotalUserCount()
         {
             throw new NotImplementedException();
         }
