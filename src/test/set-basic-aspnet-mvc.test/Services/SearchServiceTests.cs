@@ -24,15 +24,18 @@ namespace set_basic_aspnet_mvc.test.Services
             var queryableVal = new Mock<IQueryable<User>>();
 
             userRepository.Setup(x => x.AsQueryable()).Returns(queryableVal.Object);
-            queryableVal.Setup(
-                x => x.Where(user1 => user1.FullName.Contains(It.IsAny<string>()) || user1.Email == It.IsAny<string>()))
-                .Returns(queryableVal.Object);
+            //queryableVal.Setup(
+            //    x => x.Where(user1 => user1.FullName.Contains(It.IsAny<string>()) || user1.Email == It.IsAny<string>()))
+            //    .Returns(queryableVal.Object);
+            //queryableVal.Setup(
+            //    x => x.Where(It.IsAny<Expression<Func<User, bool>>>()))
+            //    .Returns(queryableVal.Object);
              
 
             // Act
             var searchService = new SearchService(userRepository.Object);
-            var user = await searchService.Query("asda");
-
+            var user = await searchService.Query("");
+             
             // Assert
             //Assert.NotNull(user);
             //Assert.AreEqual(user.Email, email);
