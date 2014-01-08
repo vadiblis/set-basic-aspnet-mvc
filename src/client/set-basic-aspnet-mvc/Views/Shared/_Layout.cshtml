@@ -25,9 +25,9 @@
             <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
                 <ul class="nav navbar-nav navbar-left">
                     <li><a href="/lang/change/tr"><img src="/public/img/flag/tr.png" alt="Türkçe" /></a></li>
-                    <li><a href="/lang/change/en"><img src="/public/img/flag/en.png" alt="English" /></a></li>
+                    <li><a style="margin-left:-20px;" href="/lang/change/en"><img src="/public/img/flag/en.png" alt="English" /></a></li>
                     <li><a href="/">@Html.LocalizationString("menu_home")</a></li>
-                </ul>             
+                </ul>
 
                 <ul class="nav navbar-nav navbar-right">
                     <li>
@@ -61,10 +61,8 @@
             </nav>
         </div>
     </header>
-    <div id="main" class="container">
-        <div class="row">
-            @RenderBody()
-        </div>
+    <div id="main" class="container" style="padding-top: 100px;">
+        @RenderBody()
     </div>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
