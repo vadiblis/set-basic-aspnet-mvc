@@ -1,10 +1,11 @@
-﻿using System.Threading;
+﻿using System.Web.Mvc;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Mvc;
 
 using set_basic_aspnet_mvc.Domain.Services;
 using set_basic_aspnet_mvc.Models;
 using set_basic_aspnet_mvc.Helpers;
+using set_basic_aspnet_mvc.Domain.Entities;
 
 namespace set_basic_aspnet_mvc.Controllers
 {
@@ -17,14 +18,14 @@ namespace set_basic_aspnet_mvc.Controllers
             IUserService userService, 
             IFormsAuthenticationService formsAuthenticationService)
         {
-            _userService = userService;
             _formsAuthenticationService = formsAuthenticationService;
+            _userService = userService;
         }
 
         [HttpGet, AllowAnonymous]
         public ViewResult New()
         {
-            var model = new LoginModel();
+            var model = new UserModel();
             return View(model);
         }
 
@@ -38,7 +39,7 @@ namespace set_basic_aspnet_mvc.Controllers
             }
 
             model.Language = Thread.CurrentThread.CurrentUICulture.Name;
-            var userId = await _userService.Create(model.FullName, model.Email, model.Password, model.RoleId, model.Language);
+            var userId = await _userService.Create(model.FullName, model.Email, model.Password, SetRole.User.Value, model.Language);
             if (userId == null)
             {
                 model.Msg = LocalizationStringHtmlHelper.LocalizationString("please_check_the_fields_and_try_again");

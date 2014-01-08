@@ -1,1 +1,5 @@
-﻿
+﻿@model set_basic_aspnet_mvc.Models.UserModel
+
+@{
+    ViewBag.Title = string.Format("{0} {1}", Model.FullName, Html.LocalizationString("title_user_detail"));
+}

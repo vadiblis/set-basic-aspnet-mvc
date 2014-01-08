@@ -104,7 +104,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\User\Detail.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
-    <Content Include="Views\User\Logout.cshtml" />
     <Content Include="Views\User\New.cshtml" />
     <Content Include="Views\User\PasswordChange.cshtml" />
     <Content Include="Views\User\PasswordReset.cshtml" />

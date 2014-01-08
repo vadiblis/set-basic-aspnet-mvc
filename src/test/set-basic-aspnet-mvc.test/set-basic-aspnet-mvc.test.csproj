@@ -33,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Builders\AdminControllerBuilder.cs" />
+    <Compile Include="Builders\HomeControllerBuilder.cs" />
     <Compile Include="Builders\UserControllerBuilder.cs" />
     <Compile Include="Controllers\AdminControllerTests.cs" />
     <Compile Include="Controllers\HomeControllerTests.cs" />
