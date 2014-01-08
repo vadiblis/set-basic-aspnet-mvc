@@ -147,7 +147,7 @@ namespace set_basic_aspnet_mvc.Domain.Services
 
             _userRepo.Update(user);
 
-            if (!_userRepo.SaveChanges()) Task.FromResult(false);
+            if (!_userRepo.SaveChanges()) await Task.FromResult(false);
 
             //_messagingService.SendMail(new MsgSendMailReqModel
             //            {
@@ -196,7 +196,7 @@ namespace set_basic_aspnet_mvc.Domain.Services
 
             _userRepo.Update(user);
 
-            if (!_userRepo.SaveChanges()) Task.FromResult(false);
+            if (!_userRepo.SaveChanges()) await Task.FromResult(false);
 
             return await Task.FromResult(true);
         }
