@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Domain.Repositories;
+using set_basic_aspnet_mvc.Helpers;
 
 namespace set_basic_aspnet_mvc.Domain.Services
 {
@@ -11,7 +12,7 @@ namespace set_basic_aspnet_mvc.Domain.Services
         //Task<List<User>> GetAll(int page, int latestId);
         //Task<List<User>> GetAllByRoleId(int roleId, int page, int latestId);
 
-        Task<int> Create(string fullName, string email, string password, int roleId);
+        Task<object> Create(string fullName, string email, string password, int roleId, string language);
         Task<bool> Authenticate(string email, string password);
         Task<bool> ChangeStatus(int userId, int updatedBy, bool isActive);
     }
@@ -24,19 +25,71 @@ namespace set_basic_aspnet_mvc.Domain.Services
             _userRepo = userRepo;
         }
 
-        public Task<int> Create(string fullName, string email, string password, int roleId)
+        public async Task<object> Create(string fullName, string email, string password, int roleId, string language)
         {
-            throw new NotImplementedException();
+            var img = GravatarHelper.GetGravatarURL(email, 55, "mm");
+
+            var user = new User
+            {
+                Email = email,
+                FullName = fullName,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
+                //hatırlat
+                ImageUrl = img,
+                RoleId = roleId,
+                IsActive = true,
+                Language = language
+            };
+
+            _userRepo.Create(user);
+
+            if (!_userRepo.SaveChanges()) return null;
+
+            return await Task.FromResult(user.Id);
         }
 
         public Task<bool> Authenticate(string email, string password)
         {
-            throw new NotImplementedException();
+            var user = _userRepo.FindOne(x => x.Email == email && x.PasswordHash != null);
+            if (user == null) return Task.FromResult(false);
+            var result = false;
+
+            if (BCrypt.Net.BCrypt.Verify(password, user.PasswordHash)
+                && user.LoginTryCount < 5)
+            {
+                user.LastLoginAt = DateTime.Now;
+                user.LoginTryCount = 0;
+                result = true;
+            }
+            else
+            {
+                user.LoginTryCount += 1;
+            }
+
+            _userRepo.Update(user);
+            _userRepo.SaveChanges();
+
+            return Task.FromResult(result);
         }
 
         public Task<bool> ChangeStatus(int userId, int updatedBy, bool isActive)
         {
-            throw new NotImplementedException();
+            if (userId < 1)
+            {
+                return Task.FromResult(false);
+            }
+
+            var user = _userRepo.FindOne(x => Convert.ToInt32(x.Id) == userId);
+            if (user == null)
+            {
+                return Task.FromResult(false);
+            }
+
+            user.IsActive = !isActive;
+            _userRepo.Update(user);
+            _userRepo.SaveChanges();
+
+            return Task.FromResult(true);
         }
 
         ///// <summary>
