@@ -1,7 +1,9 @@
 ﻿namespace set_basic_aspnet_mvc.Models
 {
-    public class BaseModel
+    public abstract class BaseModel
     {
         public string Msg { get; set; }
+
+        public abstract bool IsValid();
     }
 }

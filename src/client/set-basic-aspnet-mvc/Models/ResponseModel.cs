@@ -4,5 +4,10 @@
     {
         public bool IsOk { get; set; }
         public object Result { get; set; }
+
+        public override bool IsValid()
+        {
+            return true;
+        }
     }
 }
