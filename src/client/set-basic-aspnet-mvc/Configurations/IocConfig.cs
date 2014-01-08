@@ -8,6 +8,7 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using set_basic_aspnet_mvc.Domain.Services;
+using set_basic_aspnet_mvc.Domain.Repositories;
 
 namespace set_basic_aspnet_mvc.Configurations
 {
@@ -49,16 +50,14 @@ namespace set_basic_aspnet_mvc.Configurations
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             container.Register(
-                Component.For<IUserService>().ImplementedBy<UserService>().LifestylePerWebRequest());
-                //    Component.For(typeof(IRepository<>)).ImplementedBy(typeof(Repository<>)).LifestyleTransient(),
+                Component.For(typeof(IRepository<>)).ImplementedBy(typeof(Repository<>)).LifestyleTransient(),
 
-                //    Component.For<IFormsAuthenticationService>().ImplementedBy<FormsAuthenticationService>().LifestylePerWebRequest(),
+                Component.For<IFormsAuthenticationService>().ImplementedBy<FormsAuthenticationService>().LifestylePerWebRequest(), 
+                Component.For<IUserService>().ImplementedBy<UserService>().LifestylePerWebRequest());                
 
                 
-            //    Component.For<IAppService>().ImplementedBy<AppService>().LifestylePerWebRequest(),
             //    Component.For<ITagService>().ImplementedBy<TagService>().LifestylePerWebRequest(),
-            //    Component.For<IReportService>().ImplementedBy<ReportService>().LifestylePerWebRequest(),
-            //    Component.For<IWordService>().ImplementedBy<WordService>().LifestylePerWebRequest(),
+            //    Component.For<IReportService>().ImplementedBy<ReportService>().LifestylePerWebRequest(),            
             //    Component.For<ISearchService>().ImplementedBy<SearchService>().LifestylePerWebRequest());
         }
     }

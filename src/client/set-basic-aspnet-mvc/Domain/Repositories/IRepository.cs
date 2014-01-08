@@ -23,5 +23,5 @@ namespace set_basic_aspnet_mvc.Domain.Repositories
         IQueryable AsQueryable();
 
         bool SaveChanges();
-    }
+    }   
 }

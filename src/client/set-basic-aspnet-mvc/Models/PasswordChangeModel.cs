@@ -11,6 +11,7 @@ namespace set_basic_aspnet_mvc.Models
         public bool IsValid()
         {
             return !string.IsNullOrEmpty(Password)
+                   && !string.IsNullOrEmpty(Token)
                    && !string.IsNullOrEmpty(Email)
                    && Email.IsEmail();
         }

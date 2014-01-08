@@ -12,7 +12,7 @@
                 <span><a href="/user/passwordreset">@Html.LocalizationString("password_forgot")</a></span>
             </div>
             <div class="panel-body">
-                <form class="form-horizontal" action="/user/login" method="post" id="frm" name="frm">
+                <form class="form-horizontal" action="/user/login?ReturnUrl=@Request.QueryString["ReturnUrl"]" method="post" id="frm" name="frm">
                     <div class="form-group">
                         <label for="email" class="col-sm-3 control-label hidden-xs">
                             @Html.LocalizationString("email")

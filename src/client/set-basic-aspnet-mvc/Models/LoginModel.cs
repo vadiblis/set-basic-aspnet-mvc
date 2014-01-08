@@ -4,7 +4,6 @@ namespace set_basic_aspnet_mvc.Models
 {
     public class LoginModel  : BaseModel
     {
-        public string FullName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string ReturnUrl { get; set; }
@@ -12,9 +11,7 @@ namespace set_basic_aspnet_mvc.Models
         internal bool IsValid()
         {
             return !string.IsNullOrEmpty(Password)
-                    && !string.IsNullOrEmpty(Email)
                     && Email.IsEmail();
-
         }
     }
 }

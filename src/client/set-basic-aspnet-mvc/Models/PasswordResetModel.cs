@@ -2,18 +2,13 @@
 
 namespace set_basic_aspnet_mvc.Models
 {
-
     public class PasswordResetModel : BaseModel
     {
         public string Email { get; set; }
 
         public bool IsValid()
         {
-            return !string.IsNullOrEmpty(Email)
-                   && Email.IsEmail();
+            return Email.IsEmail();
         }
-
-
     }
-
 }

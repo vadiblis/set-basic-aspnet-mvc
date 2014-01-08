@@ -39,6 +39,7 @@ namespace set_basic_aspnet_mvc.Controllers
             }
 
             model.Language = Thread.CurrentThread.CurrentUICulture.Name;
+            
             var userId = await _userService.Create(model.FullName, model.Email, model.Password, SetRole.User.Value, model.Language);
             if (userId == null)
             {
@@ -50,8 +51,7 @@ namespace set_basic_aspnet_mvc.Controllers
 
             return Redirect("/user/detail");
         }
-
-
+        
         [HttpGet, AllowAnonymous]
         public ViewResult Login()
         {
@@ -62,21 +62,21 @@ namespace set_basic_aspnet_mvc.Controllers
         [HttpPost, ValidateAntiForgeryToken, AllowAnonymous]
         public async Task<ActionResult> Login(LoginModel model)
         {
-
             if (!model.IsValid())
             {
                 model.Msg = LocalizationStringHtmlHelper.LocalizationString("please_check_the_fields_and_try_again");
                 return View(model);
             }
 
-            var authenticated = await _userService.Authenticate(model.Email, model.Password);
-            if (!authenticated)
+            var isAuthenticated = await _userService.Authenticate(model.Email, model.Password);
+            if (!isAuthenticated)
             {
                 model.Msg = LocalizationStringHtmlHelper.LocalizationString("please_check_the_fields_and_try_again");
                 return View(model);
             }
 
             var user = await _userService.GetByEmail(model.Email);
+            
             _formsAuthenticationService.SignIn(user.Id, user.FullName, user.Email, true);
 
             if (!string.IsNullOrEmpty(model.ReturnUrl))
@@ -84,7 +84,7 @@ namespace set_basic_aspnet_mvc.Controllers
                 return Redirect(model.ReturnUrl);
             }
 
-            return Redirect("/user/detail");
+            return RedirectToHome();
         }
 
         [HttpGet]
@@ -109,9 +109,26 @@ namespace set_basic_aspnet_mvc.Controllers
         }
 
         [HttpGet]
-        public ViewResult Detail()
+        public async Task<ActionResult> Detail(int id)
         {
-            return View();
+            if (id < 1)
+            {
+                id = User.Identity.GetUserId();
+            }
+
+            var user = await _userService.Get(id);
+            if (user == null)
+            {
+                return RedirectToHome();
+            }
+
+            var model = new UserModel 
+                        {
+                            FullName= user.FullName,
+
+                        };            
+
+            return View(model);
         }
     }
 }
