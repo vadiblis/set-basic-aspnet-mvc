@@ -129,39 +129,44 @@ namespace set_basic_aspnet_mvc.Domain.Services
 
         public async Task<bool> RequestPasswordReset(string email)
         {
-            if (string.IsNullOrEmpty(email)) return await Task.FromResult(false);
+            
 
-            var user = await GetByEmail(email);
-            if (user == null) return await Task.FromResult(false);
 
-            //1 saat içinde istekde bulunmuş mu?
-            if (user.PasswordResetRequestedAt != null
-                && user.PasswordResetRequestedAt.Value.AddMinutes(PASSWORD_RESET_VALIDATION_MINUTES * -1) > DateTime.Now) return await Task.FromResult(false);
-                       
-            var token = Guid.NewGuid().ToString().Replace("-", string.Empty);
 
-            user.PasswordResetToken = token;
-            user.PasswordResetRequestedAt = DateTime.Now;
-            user.UpdatedAt = DateTime.Now;
-            user.UpdatedBy = user.Id;
+            if (await DoesEmailExists(new ItemRequestModel { Text = model.Text }))
+            {
+                var member = _memberRepository.GetSingle(x => x.Email == model.Text);
+                if (member.PasswordResetRequestedOn == null ||
+                   (member.PasswordResetRequestedOn != null && member.PasswordResetRequestedOn.Value.AddSeconds(15) < DateTime.Now))
+                {
+                    var token = Guid.NewGuid().ToString().Replace("-", string.Empty);
+                    var updateResult = _memberRepository.Update(Query.And(Query<Member>.EQ(x => x.Email, model.Text),
+                                                                          Query<Member>.EQ(x => x.DeletedOn, null)),
+                                                                Update<Member>.Set(x => x.PasswordResetToken, token)
+                                                                              .Set(x => x.PasswordResetRequestedOn, DateTime.Now)
+                                                                              .Set(x => x.UpdatedOn, DateTime.Now)
+                                                                              .Set(x => x.UpdatedBy, ConstHelper.System));
+                    if (updateResult.Ok)
+                    {
+                        ;
+                        _messagingService.SendMail(new MsgSendMailReqModel
+                        {
+                            ApiKey = model.ApiKey,
+                            Email = model.Text,
+                            Body = string.Format(Resource.PasswordResetMailContent,
+                                                 string.Format("{0}?email={1}&token={2}",
+                                                               Resource.PasswordResetRoute,
+                                                               model.Text, token)),
+                            Subject = Resource.PasswordResetMailSubject,
+                            MemberId = model.MemberId
+                        });
 
-            _userRepo.Update(user);
+                        return await Task.FromResult(true);
+                    }
+                }
+            }
 
-            if (!_userRepo.SaveChanges()) Task.FromResult(false);
-
-            //_messagingService.SendMail(new MsgSendMailReqModel
-            //            {
-            //                ApiKey = model.ApiKey,
-            //                Email = model.Text,
-            //                Body = string.Format(Resource.PasswordResetMailContent,
-            //                                     string.Format("{0}?email={1}&token={2}",
-            //                                                   Resource.PasswordResetRoute,
-            //                                                   model.Text, token)),
-            //                Subject = Resource.PasswordResetMailSubject,
-            //                MemberId = model.MemberId
-            //            });
-
-            return await Task.FromResult(true);                 
+            return await Task.FromResult(false);
         }
 
         public async Task<bool> IsPasswordResetRequestValid(string email, string token)
@@ -173,32 +178,33 @@ namespace set_basic_aspnet_mvc.Domain.Services
 
             if (user.PasswordResetRequestedAt == null) return await Task.FromResult(false);
             
-            if (user.PasswordResetToken != token
-                && user.Email != email
-                && user.PasswordResetRequestedAt.Value < DateTime.Now.AddMinutes(PASSWORD_RESET_VALIDATION_MINUTES)) return await Task.FromResult(false);
+            if (user.PasswordResetToken == token && user.PasswordResetRequestedAt.Value >= DateTime.Now.AddMinutes(PASSWORD_RESET_VALIDATION_MINUTES)) return await Task.FromResult(false);
 
-            return await Task.FromResult(true);
+            //return await Task.FromResult(_memberRepository.AsQueryable()
+            //                        .Any(x => x.Email == model.Email
+            //                               && x.PasswordResetToken == model.Token
+            //                               && x.PasswordResetRequestedOn >= DateTime.Now.AddHours(-1)));
         }
 
         public async Task<bool> ChangePassword(string email, string token, string password)
         {
-            var isValid = await IsPasswordResetRequestValid(email, token);
-            if (!isValid) return await Task.FromResult(false);
+            //if (await IsPasswordResetRequestValid(new MemberIsPasswordResetRequestValidRequestModel { ApiKey = model.ApiKey, Email = model.Email, Token = model.Token }))
+            //{
+            //    var updateResult = _memberRepository.Update(Query.And(Query<Member>.EQ(x => x.Email, model.Email),
+            //                                                          Query<Member>.EQ(x => x.DeletedOn, null)),
+            //                                                 Update<Member>.Set(x => x.PasswordResetToken, null)
+            //                                                                  .Set(x => x.PasswordResetRequestedOn, null)
+            //                                                                  .Set(x => x.PasswordHash, BCrypt.Net.BCrypt.HashPassword(model.NewPassword, BCrypt.Net.BCrypt.GenerateSalt(12)))
+            //                                                                  .Set(x => x.UpdatedOn, DateTime.Now)
+            //                                                                  .Set(x => x.UpdatedBy, ConstHelper.System));
 
-            var user = await GetByEmail(email);
+            //    if (updateResult.Ok)
+            //    {
+            //        return await Task.FromResult(true);
+            //    }
+            //}
 
-            user.PasswordResetToken = null;
-            user.PasswordResetRequestedAt = null;
-            user.UpdatedAt = DateTime.Now;
-            user.UpdatedBy = user.Id;
-            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
-            user.LoginTryCount = 0;
-
-            _userRepo.Update(user);
-
-            if (!_userRepo.SaveChanges()) Task.FromResult(false);
-
-            return await Task.FromResult(true);
+            return await Task.FromResult(false);
         }
 
 
