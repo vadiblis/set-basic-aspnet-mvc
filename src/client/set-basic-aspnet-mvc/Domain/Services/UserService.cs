@@ -13,7 +13,7 @@ namespace set_basic_aspnet_mvc.Domain.Services
         //Task<List<User>> GetAll(int page, int latestId);
         //Task<List<User>> GetAllByRoleId(int roleId, int page, int latestId);
 
-        Task<object> Create(string fullName, string email, string password, int roleId, string language);
+        Task<long?> Create(string fullName, string email, string password, int roleId, string language);
         Task<bool> Authenticate(string email, string password);
         Task<bool> ChangeStatus(int userId, int updatedBy, bool isActive);
 
@@ -37,7 +37,7 @@ namespace set_basic_aspnet_mvc.Domain.Services
             _userRepo = userRepo;
         }
 
-        public async Task<object> Create(string fullName, string email, string password, int roleId, string language)
+        public async Task<long?> Create(string fullName, string email, string password, int roleId, string language)
         {
             var img = GravatarHelper.GetGravatarURL(email, 55, "mm");
             var user = new User
