@@ -105,13 +105,17 @@ namespace set_basic_aspnet_mvc.Domain.Services
         }
 
         public Task<User> Get(int id)
-        {
-            throw new NotImplementedException();
+        {  
+            var user = _userRepo.FindOne(x => x.Id == id);
+            return Task.FromResult(user);
         }
 
         public Task<User> GetByEmail(string email)
         {
-            throw new NotImplementedException();
+            if (!email.IsEmail()) return null;
+            
+            var user = _userRepo.FindOne(x => x.Email == email);
+            return Task.FromResult(user);
         }
 
         ///// <summary>
