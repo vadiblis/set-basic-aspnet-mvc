@@ -33,11 +33,8 @@ namespace set_basic_aspnet_mvc.test.Services
             var sut = new SearchServiceBuilder().WithUserRespository(userRepository.Object)
                                                 .Build();
 
-            var nullTask = sut.Query(string.Empty);
-
-            var notNullResult = sut.Query(key).Result;
-            //var notNullResult = notNullTask.Result;
-            //notNullTask.Wait();
+            var nullTask = await sut.Query(string.Empty);
+            var notNullResult = await sut.Query(key); 
 
             // Assert
             Assert.IsNull(nullTask);

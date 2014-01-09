@@ -35,6 +35,7 @@
     <Compile Include="Builders\AdminControllerBuilder.cs" />
     <Compile Include="Builders\HomeControllerBuilder.cs" />
     <Compile Include="Builders\LangControllerBuilder.cs" />
+    <Compile Include="Builders\ReportServiceBuilder.cs" />
     <Compile Include="Builders\SearchControllerBuilder.cs" />
     <Compile Include="Builders\SearchServiceBuilder.cs" />
     <Compile Include="Builders\UserControllerBuilder.cs" />

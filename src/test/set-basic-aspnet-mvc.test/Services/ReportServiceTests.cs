@@ -7,6 +7,7 @@ using NUnit.Framework;
 using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Domain.Repositories;
 using set_basic_aspnet_mvc.Domain.Services;
+using set_basic_aspnet_mvc.test.Builders;
 
 namespace set_basic_aspnet_mvc.test.Services
 {
@@ -20,11 +21,15 @@ namespace set_basic_aspnet_mvc.test.Services
             userRepository.Setup(x => x.FindAll(It.IsAny<Expression<Func<User, bool>>>()));
 
             // Act
-            var reportService = new ReportService(userRepository.Object);
-            var userCount = await reportService.GetTotalUserCount();
+            var sut = new ReportServiceBuilder().WithUserRespository(userRepository.Object)
+                                                .Build();
+              
+            var userCount = await sut.GetTotalUserCount();
 
             // Assert
             Assert.NotNull(userCount);
+            Assert.IsInstanceOf<IReportService>(sut);
+            Assert.IsAssignableFrom<int>(userCount);
             //userRepository.Verify(x => x.FindAll(It.IsAny<Expression<Func<User, bool>>>()), Times.Once);
         }
     }
