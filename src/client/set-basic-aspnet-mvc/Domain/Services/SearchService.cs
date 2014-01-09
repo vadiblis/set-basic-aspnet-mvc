@@ -37,12 +37,12 @@ namespace set_basic_aspnet_mvc.Domain.Services
 
             var result = new List<SearchResult>();
 
-            var users = _userRepository.AsQueryable();
+            var users = _userRepository.FindAll();
             foreach (var key in keys)
             {
                 var k = key;
-                users = users.Where(x => x.FullName.Contains(k)
-                                         || x.Email == k);
+                users = _userRepository.AsQueryable(users, x => x.FullName.Contains(k)
+                                                                || x.Email == k);
             }
 
             var userResults = users.OrderByDescending(x => x.Id).Skip(0).Take(10).ToList();

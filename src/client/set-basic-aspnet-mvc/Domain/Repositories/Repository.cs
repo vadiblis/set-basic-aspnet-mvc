@@ -10,6 +10,7 @@ namespace set_basic_aspnet_mvc.Domain.Repositories
     public class Repository<TEntity> : IRepository<TEntity> 
            where TEntity : BaseEntity
     {
+
         public TEntity Create(TEntity entity)
         {
             throw new NotImplementedException();
@@ -50,7 +51,7 @@ namespace set_basic_aspnet_mvc.Domain.Repositories
             throw new NotImplementedException();
         }
 
-        public IQueryable<TEntity> AsQueryable()
+        public IQueryable<TEntity> AsQueryable(IQueryable<TEntity> existing, System.Linq.Expressions.Expression<Func<TEntity, bool>> where = null)
         {
             throw new NotImplementedException();
         }

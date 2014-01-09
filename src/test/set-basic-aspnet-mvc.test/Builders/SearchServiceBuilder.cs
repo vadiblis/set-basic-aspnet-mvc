@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Moq;
+
 using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Domain.Repositories;
 using set_basic_aspnet_mvc.Domain.Services;
@@ -11,22 +8,22 @@ namespace set_basic_aspnet_mvc.test.Builders
 {
     class SearchServiceBuilder
     {
-        private IRepository<User> _userService;
+        private IRepository<User> _userRepository;
 
         public SearchServiceBuilder()
         {
-            _userService = null;
+            _userRepository = new Mock<IRepository<User>>().Object;
         }
 
-        internal SearchServiceBuilder WithUserService(IRepository<User> userService)
+        internal SearchServiceBuilder WithUserRespository(IRepository<User> userRepository)
         {
-            _userService = userService;
+            _userRepository = userRepository;
             return this;
         }
 
         internal SearchService Build()
         {
-            return new SearchService(_userService);
+            return new SearchService(_userRepository);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace set_basic_aspnet_mvc.Domain.Repositories
 
         TEntity FindOne(Expression<Func<TEntity, bool>> where = null, params Expression<Func<TEntity, object>>[] includeProperties);
         IQueryable<TEntity> FindAll(Expression<Func<TEntity, bool>> where = null, params Expression<Func<TEntity, object>>[] includeProperties);
-        IQueryable<TEntity> AsQueryable();
+        IQueryable<TEntity> AsQueryable(IQueryable<TEntity> existing, Expression<Func<TEntity, bool>> where = null);
 
         bool SaveChanges();
     }   

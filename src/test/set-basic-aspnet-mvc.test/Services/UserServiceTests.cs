@@ -137,11 +137,11 @@ namespace set_basic_aspnet_mvc.test.Services
             // Arrange
             const string email = "test@test.com";
             const string token = "test";
-            const long userId = 1;
-            const string password = "password";
+            const long userId = 1;            
 
             var userRepository = new Mock<IRepository<User>>();
-            userRepository.Setup(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>())).Returns(new User { Email = email, PasswordResetToken = token, PasswordResetRequestedAt = null, UpdatedAt = DateTime.Now, UpdatedBy = userId });
+            userRepository.Setup(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>()))
+                          .Returns(new User { Email = email, PasswordResetToken = token, PasswordResetRequestedAt = null, UpdatedAt = DateTime.Now, UpdatedBy = userId });
 
             // Act
             var userService = new UserService(userRepository.Object);
