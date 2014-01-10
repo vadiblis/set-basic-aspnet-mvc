@@ -1,5 +1,4 @@
-﻿using System;
-using set_basic_aspnet_mvc.Domain.Entities;
+﻿using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Helpers;
 
 namespace set_basic_aspnet_mvc.Models
@@ -7,6 +6,8 @@ namespace set_basic_aspnet_mvc.Models
     public class FeedbackModel : BaseModel
     {
         public long Id { get; set; }
+        
+        public long UserId { get; set; }
 
         public string UserEmail { get; set; }
 
@@ -15,8 +16,8 @@ namespace set_basic_aspnet_mvc.Models
         public override bool IsValid()
         {
             return !string.IsNullOrEmpty(Info)
-                   && !string.IsNullOrEmpty(Info)
-                   && UserEmail.IsEmail();
+                && !string.IsNullOrEmpty(Info)
+                && UserEmail.IsEmail();
         }
 
         public static FeedbackModel Map(Feedback feedback)
@@ -25,6 +26,7 @@ namespace set_basic_aspnet_mvc.Models
             {
                 Id =  feedback.Id,
                 UserEmail = feedback.UserEmail,
+                UserId = feedback.UserId,
                 Info = feedback.Info
             };
         }
