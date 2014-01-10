@@ -144,10 +144,12 @@
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Domain\Entities\BaseEntity.cs" />
+    <Compile Include="Domain\Entities\Feedback.cs" />
     <Compile Include="Domain\Entities\SearchResult.cs" />
     <Compile Include="Domain\Entities\SetRole.cs" />
     <Compile Include="Domain\Entities\User.cs" />
     <Compile Include="Domain\Repositories\Repository.cs" />
+    <Compile Include="Domain\Services\FeedbackService.cs" />
     <Compile Include="Domain\Services\MessageService.cs" />
     <Compile Include="Domain\Services\ReportService.cs" />
     <Compile Include="Domain\Services\SearchService.cs" />
@@ -161,6 +163,7 @@
     <Compile Include="Helpers\LocalizationStringHtmlHelper.cs" />
     <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Models\BaseModel.cs" />
+    <Compile Include="Models\FeedbackModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\PasswordChangeModel.cs" />
     <Compile Include="Models\PasswordResetModel.cs" />
