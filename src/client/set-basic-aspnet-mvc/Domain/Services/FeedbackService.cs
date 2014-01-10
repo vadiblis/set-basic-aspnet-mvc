@@ -15,8 +15,6 @@ namespace set_basic_aspnet_mvc.Domain.Services
         
         Task<Feedback> GetFeedback(int id);
         
-        Task<DateTime?> GetFeedbackCreateDate(int id);
-        
         Task<bool> SetFeedbackToReviewed(int id);
                 
         // get feedbacks starting from feedback with specific date
@@ -62,17 +60,7 @@ namespace set_basic_aspnet_mvc.Domain.Services
             var feedback = _feedbackRepo.FindOne(x => x.Id == id);
             return Task.FromResult(feedback);
         }
-
-        public async Task<DateTime?> GetFeedbackCreateDate(int id)
-        {
-            if (id < 0) return null;
-
-            var feedback = await GetFeedback(id);
-            if (feedback == null) return null;
-
-            return await Task.FromResult(feedback.CreatedAt);
-        }
-
+        
         public async Task<bool> SetFeedbackToReviewed(int id)
         {
             if (id < 0) return await Task.FromResult(false);
@@ -83,6 +71,7 @@ namespace set_basic_aspnet_mvc.Domain.Services
             if (feedback.Reviewed.HasValue && feedback.Reviewed.Value) return await Task.FromResult(true);
 
             feedback.Reviewed = true;
+            feedback.ReviewedAt = DateTime.Now;
             _feedbackRepo.Update(feedback);
 
             var result = _feedbackRepo.SaveChanges();

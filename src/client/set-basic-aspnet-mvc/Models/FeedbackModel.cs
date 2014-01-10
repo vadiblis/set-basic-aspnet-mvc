@@ -1,4 +1,5 @@
-﻿using set_basic_aspnet_mvc.Domain.Entities;
+﻿using System;
+using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Helpers;
 
 namespace set_basic_aspnet_mvc.Models
@@ -12,6 +13,10 @@ namespace set_basic_aspnet_mvc.Models
         public string UserEmail { get; set; }
 
         public string Info { get; set; }
+
+        public bool? Reviewed { get; set; }
+
+        public DateTime? ReviewedAt { get; set; }
 
         public override bool IsValid()
         {
@@ -27,7 +32,9 @@ namespace set_basic_aspnet_mvc.Models
                 Id =  feedback.Id,
                 UserEmail = feedback.UserEmail,
                 UserId = feedback.UserId,
-                Info = feedback.Info
+                Info = feedback.Info,
+                Reviewed = feedback.Reviewed,
+                ReviewedAt = feedback.ReviewedAt
             };
         }
     }
