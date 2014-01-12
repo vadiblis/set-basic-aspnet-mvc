@@ -50,7 +50,7 @@ namespace set_basic_aspnet_mvc.Configurations
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             container.Register(
-                Component.For(typeof(IRepository<>)).ImplementedBy(typeof(Repository<>)).LifestyleTransient(),
+                Component.For(typeof(IRepository<>)).ImplementedBy(typeof(DapperRepository<>)).LifestyleTransient(),
 
                 Component.For<IFormsAuthenticationService>().ImplementedBy<FormsAuthenticationService>().LifestylePerWebRequest(),
                 Component.For<IUserService>().ImplementedBy<UserService>().LifestylePerWebRequest(),
