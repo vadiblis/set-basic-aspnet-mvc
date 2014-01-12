@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
 using set_basic_aspnet_mvc.Domain.Services;
-using set_basic_aspnet_mvc.Helpers;
-using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Models;
 
 namespace set_basic_aspnet_mvc.Controllers
@@ -38,28 +34,24 @@ namespace set_basic_aspnet_mvc.Controllers
         {
             return View();
         }
-
-        //todo:temporary allowanonymous
-        [HttpGet, AllowAnonymous]
+        
+        [HttpGet]
         public async Task<ViewResult> Users(int id = 0, int lastId = 0)
         {
             var page = id;
 
             var items = await _userService.GetUsers(lastId, page);
-
             var model = items.Items.Select(UserModel.Map).ToList();
 
             return View(model);
         }
 
-        //todo:temporary allowanonymous
-        [HttpGet, AllowAnonymous]
+        [HttpGet]
         public async Task<ActionResult> Feedbacks(int id = 0, int lastId = 0)
         {
             var page = id;
 
             var items = await _feedbackService.GetFeedbacks(lastId, page);
-
             var model = items.Items.Select(FeedbackModel.Map).ToList();
 
             return View(model);

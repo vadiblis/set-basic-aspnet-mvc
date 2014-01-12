@@ -7,6 +7,7 @@ using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
+
 using set_basic_aspnet_mvc.Domain.Services;
 using set_basic_aspnet_mvc.Domain.Repositories;
 
@@ -50,9 +51,10 @@ namespace set_basic_aspnet_mvc.Configurations
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             container.Register(
-                Component.For(typeof(IRepository<>)).ImplementedBy(typeof(DapperRepository<>)).LifestyleTransient(),
+                Component.For(typeof(IRepository<>)).ImplementedBy(typeof(Repository<>)).LifestyleTransient(),
 
                 Component.For<IFormsAuthenticationService>().ImplementedBy<FormsAuthenticationService>().LifestylePerWebRequest(),
+
                 Component.For<IUserService>().ImplementedBy<UserService>().LifestylePerWebRequest(),
                 Component.For<IReportService>().ImplementedBy<ReportService>().LifestylePerWebRequest(),
                 Component.For<ITagService>().ImplementedBy<TagService>().LifestylePerWebRequest(),

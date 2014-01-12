@@ -151,7 +151,6 @@
     <Compile Include="Domain\Entities\SearchResult.cs" />
     <Compile Include="Domain\Entities\SetRole.cs" />
     <Compile Include="Domain\Entities\User.cs" />
-    <Compile Include="Domain\Repositories\DapperRepository.cs" />
     <Compile Include="Domain\Repositories\Repository.cs" />
     <Compile Include="Domain\Services\FeedbackService.cs" />
     <Compile Include="Domain\Services\MessageService.cs" />
