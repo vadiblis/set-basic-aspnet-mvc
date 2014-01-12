@@ -56,7 +56,8 @@ namespace set_basic_aspnet_mvc.Configurations
                 Component.For<IUserService>().ImplementedBy<UserService>().LifestylePerWebRequest(),
                 Component.For<IReportService>().ImplementedBy<ReportService>().LifestylePerWebRequest(),
                 Component.For<ITagService>().ImplementedBy<TagService>().LifestylePerWebRequest(),
-                Component.For<ISearchService>().ImplementedBy<SearchService>().LifestylePerWebRequest());
+                Component.For<ISearchService>().ImplementedBy<SearchService>().LifestylePerWebRequest(),
+                Component.For<IFeedbackService>().ImplementedBy<FeedbackService>().LifestylePerWebRequest());
         }
     }
 }

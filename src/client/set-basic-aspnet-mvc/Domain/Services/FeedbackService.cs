@@ -9,7 +9,7 @@ using set_basic_aspnet_mvc.Helpers;
 
 namespace set_basic_aspnet_mvc.Domain.Services
 {
-    interface IFeedbackService
+    public interface IFeedbackService
     {
         Task<bool> AddFeedback(long userId, string userEmail, string info);
         
