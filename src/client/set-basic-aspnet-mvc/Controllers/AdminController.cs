@@ -25,7 +25,6 @@ namespace set_basic_aspnet_mvc.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             //todo:temporarty commented because no admin user exists
-
             /*if (User.Identity.GetUserRoleId() != SetRole.Admin.Value)
             {
                 filterContext.Result = RedirectToHome();
@@ -40,14 +39,17 @@ namespace set_basic_aspnet_mvc.Controllers
             return View();
         }
 
-        [HttpGet]
-        public ViewResult Users(int id = 1)
+        //todo:temporary allowanonymous
+        [HttpGet, AllowAnonymous]
+        public async Task<ViewResult> Users(int id = 0, int lastId = 0)
         {
             var page = id;
 
+            var items = await _userService.GetUsers(lastId, page);
 
+            var model = items.Items.Select(UserModel.Map).ToList();
 
-            return View();
+            return View(model);
         }
 
         //todo:temporary allowanonymous
@@ -58,12 +60,8 @@ namespace set_basic_aspnet_mvc.Controllers
 
             var items = await _feedbackService.GetFeedbacks(lastId, page);
 
-            var model = new List<FeedbackModel>();
-            foreach (var item in items.Items)
-            {
-                model.Add(FeedbackModel.Map(item));
-            }
-            
+            var model = items.Items.Select(FeedbackModel.Map).ToList();
+
             return View(model);
         }
     }
