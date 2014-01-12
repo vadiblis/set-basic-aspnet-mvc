@@ -37,9 +37,9 @@
     <Compile Include="Builders\LangControllerBuilder.cs" />
     <Compile Include="Builders\ReportServiceBuilder.cs" />
     <Compile Include="Builders\SearchControllerBuilder.cs" />
+    <Compile Include="Builders\UserServiceBuilder.cs" />
     <Compile Include="Builders\SearchServiceBuilder.cs" />
     <Compile Include="Builders\UserControllerBuilder.cs" />
-    <Compile Include="Builders\UserServiceBuilder.cs" />
     <Compile Include="Controllers\AdminControllerTests.cs" />
     <Compile Include="Controllers\HomeControllerTests.cs" />
     <Compile Include="Controllers\LangControllerTests.cs" />
