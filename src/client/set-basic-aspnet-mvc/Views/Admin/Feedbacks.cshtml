@@ -1,6 +1,5 @@
-﻿@using MvcPaging
-@using set_basic_aspnet_mvc.Helpers
-@model IPagedList<set_basic_aspnet_mvc.Models.FeedbackModel>
+﻿@using set_basic_aspnet_mvc.Helpers
+@model List<set_basic_aspnet_mvc.Models.FeedbackModel>
 
 @{
     ViewBag.Title = Html.LocalizationString("title_feedbacks");
@@ -10,16 +9,13 @@
     <thead>
         <tr>
             <th>
-                @Html.LocalizationString("ID")
+                @Html.LocalizationString("id")
             </th>
             <th>
-                @Html.LocalizationString("Info")
+                @Html.LocalizationString("email")
             </th>
             <th>
-                @Html.LocalizationString("UserEmail")
-            </th>
-            <th>
-                @Html.LocalizationString("UserId")
+                @Html.LocalizationString("feedback_info")
             </th>
         </tr>
     </thead>
@@ -28,34 +24,13 @@
     {
         <tr>
             <td>@item.Id</td>
-            <td>@item.Info</td>
             <td>@item.UserEmail</td>
-            <td>@item.UserId</td>
+            <td>@item.Info</td>
         </tr>
     }
 </table>
 
-<div class="pager">
-    @Html.Raw(Html.Pager(
-                new Options
-                {
-                    PageSize = Model.PageSize,
-                    TotalItemCount = Model.TotalItemCount,
-                    CurrentPage = Model.PageNumber,
-                    ItemTexts = new ItemTexts() { Next = Html.LocalizationString("Next"), Previous = Html.LocalizationString("Previous") },
-                    ItemIcon = new ItemIcon() { First = "icon-backward", Previous = "icon-chevron-left", Next = "icon-chevron-right", Last = "icon-forward" },
-                    TooltipTitles = new TooltipTitles()
-                    {
-                        Next = Html.LocalizationString("Next page") + " {0}",
-                        Previous = Html.LocalizationString("Previous page") + " {0}",
-                        Page = Html.LocalizationString("Go to page") + " {0}"
-                    },
-                    Size = Size.normal,
-                    Alignment = Alignment.centered,
-                    IsShowControls = true,
-                    IsShowFirstLast = true,
-                    IsShowPages = true
-                }, new { feedbackFilter = ViewData["feedbackFilter"] }))
-</div>
+@Html.Partial("_Paging")
+
 
 

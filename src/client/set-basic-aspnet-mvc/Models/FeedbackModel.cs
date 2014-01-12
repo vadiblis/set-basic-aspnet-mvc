@@ -1,4 +1,5 @@
 ﻿using System;
+
 using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Helpers;
 
@@ -27,13 +28,13 @@ namespace set_basic_aspnet_mvc.Models
 
         public static FeedbackModel Map(Feedback feedback)
         {
-            return new FeedbackModel()
+            return new FeedbackModel
             {
                 Id =  feedback.Id,
                 UserEmail = feedback.UserEmail,
-                UserId = feedback.UserId,
+                UserId = feedback.UserId ?? 0,
                 Info = feedback.Info,
-                Reviewed = feedback.Reviewed,
+                Reviewed = feedback.IsReviewed,
                 ReviewedAt = feedback.ReviewedAt
             };
         }

@@ -23,9 +23,6 @@ namespace set_basic_aspnet_mvc.Helpers
         public const string User = "User";
         public static List<string> BasicRoles = new List<string> { Admin, Developer, User };
 
-
-
-
-
+        public const int PageSize = 25;
     }
 }
