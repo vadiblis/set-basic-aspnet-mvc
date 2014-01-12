@@ -13,11 +13,13 @@ namespace set_basic_aspnet_mvc.test.Builders
     {
         private IFormsAuthenticationService _formAuthenticationService;
         private IUserService _userService;
+        private IFeedbackService _feedbackService;
 
         public AdminControllerBuilder()
         {
             _formAuthenticationService = null;
             _userService = new Mock<IUserService>().Object;
+            _feedbackService = new Mock<IFeedbackService>().Object;
         }
 
         internal AdminControllerBuilder WithFormsAuthenticationService(IFormsAuthenticationService formAuthenticationService)
@@ -32,9 +34,15 @@ namespace set_basic_aspnet_mvc.test.Builders
             return this;
         }
 
+        internal AdminControllerBuilder WithFeedbackServiceService(IFeedbackService feedbackService)
+        {
+            _feedbackService = feedbackService;
+            return this;
+        }
+
         internal AdminController Build()
         {
-            return new AdminController(_userService);
+            return new AdminController(_userService, _feedbackService);
         }
     }
 }

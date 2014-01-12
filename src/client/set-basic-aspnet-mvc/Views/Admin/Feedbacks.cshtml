@@ -1,0 +1,36 @@
+﻿@using set_basic_aspnet_mvc.Helpers
+@model List<set_basic_aspnet_mvc.Models.FeedbackModel>
+
+@{
+    ViewBag.Title = Html.LocalizationString("title_feedbacks");
+}
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.LocalizationString("id")
+            </th>
+            <th>
+                @Html.LocalizationString("email")
+            </th>
+            <th>
+                @Html.LocalizationString("feedback_info")
+            </th>
+        </tr>
+    </thead>
+
+    @foreach (var item in @Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.UserEmail</td>
+            <td>@item.Info</td>
+        </tr>
+    }
+</table>
+
+@Html.Partial("_Paging")
+
+
+
