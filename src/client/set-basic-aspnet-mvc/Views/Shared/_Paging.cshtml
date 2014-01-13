@@ -1,10 +1,18 @@
-﻿<ul class="pagination">
-    <li><a href="#">&laquo;</a></li>
-    <li><a href="#">1</a></li>
-    <li><a href="#">2</a></li>
-    <li><a href="#">3</a></li>
-    <li><a href="#">4</a></li>
-    <li><a href="#">5</a></li>
-    <li><a href="#">&raquo;</a></li>
+﻿<p>
+    @Html.LocalizationString("total_item_count") @Model.TotalCount
+</p>
+
+<ul class="pagination">
+    @if (Model.HasPreviousPage)
+    {
+        <li><a href="/@(Model.Number-1)">&laquo;</a></li>
+    }
+
+    <li><a href="#">@Model.Number</a></li>
+
+    @if (Model.HasNextPage)
+    {
+        <li><a href="/@(Model.Number+1)">&raquo;</a></li>
+    }
 </ul>
 

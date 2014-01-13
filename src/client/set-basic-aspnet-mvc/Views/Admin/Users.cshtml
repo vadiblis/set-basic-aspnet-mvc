@@ -1,5 +1,4 @@
-﻿@using set_basic_aspnet_mvc.Helpers
-@model List<set_basic_aspnet_mvc.Models.UserModel>
+﻿@model PageModel<UserModel>
 
 @{
     ViewBag.Title = Html.LocalizationString("title_users");
@@ -26,7 +25,7 @@
         </tr>
     </thead>
 
-    @foreach (var item in @Model)
+    @foreach (var item in Model.Items)
     {
         <tr>
             <td>@item.Id</td>

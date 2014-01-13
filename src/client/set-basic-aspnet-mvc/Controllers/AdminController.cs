@@ -39,23 +39,43 @@ namespace set_basic_aspnet_mvc.Controllers
         }
 
         [HttpGet]
-        public async Task<ViewResult> Users(int id = 0, int lastId = 0)
+        public async Task<ViewResult> Users(int id = 0)
         {
             var page = id;
 
             var items = await _userService.GetUsers(page);
-            var model = items.Items.Select(Mapper.Map<UserDto, UserModel>).ToList();
+            var list = items.Items.Select(Mapper.Map<UserDto, UserModel>).ToList();
+
+            var model = new PageModel<UserModel>
+            {
+                Items = list,
+                HasNextPage = items.HasNextPage,
+                HasPreviousPage = items.HasPreviousPage,
+                Number = items.Number,
+                TotalCount = items.TotalCount,
+                TotalPageCount = items.TotalPageCount
+            };
 
             return View(model);
         }
 
         [HttpGet]
-        public async Task<ActionResult> Feedbacks(int id = 0, int lastId = 0)
+        public async Task<ActionResult> Feedbacks(int id = 0)
         {
             var page = id;
 
             var items = await _feedbackService.GetFeedbacks(page);
-            var model = items.Items.Select(Mapper.Map<FeedbackDto, FeedbackModel>).ToList();
+            var list = items.Items.Select(Mapper.Map<FeedbackDto, FeedbackModel>).ToList();
+
+            var model = new PageModel<FeedbackModel>
+            {
+                Items = list,
+                HasNextPage = items.HasNextPage,
+                HasPreviousPage = items.HasPreviousPage,
+                Number = items.Number,
+                TotalCount = items.TotalCount,
+                TotalPageCount = items.TotalPageCount
+            };
 
             return View(model);
         }

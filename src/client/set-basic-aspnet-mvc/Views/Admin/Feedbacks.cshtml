@@ -1,5 +1,4 @@
-﻿@using set_basic_aspnet_mvc.Helpers
-@model List<set_basic_aspnet_mvc.Models.FeedbackModel>
+﻿@model PageModel<FeedbackModel>
 
 @{
     ViewBag.Title = Html.LocalizationString("title_feedbacks");
@@ -20,7 +19,7 @@
         </tr>
     </thead>
 
-    @foreach (var item in @Model)
+    @foreach (var item in Model.Items)
     {
         <tr>
             <td>@item.Id</td>
@@ -31,6 +30,3 @@
 </table>
 
 @Html.Partial("_Paging")
-
-
-
