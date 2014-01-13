@@ -1,8 +1,8 @@
 ﻿@using set_basic_aspnet_mvc.Helpers
-@model List<set_basic_aspnet_mvc.Models.UserModel>
+@model List<set_basic_aspnet_mvc.Models.FeedbackModel>
 
 @{
-    ViewBag.Title = Html.LocalizationString("title_users");
+    ViewBag.Title = Html.LocalizationString("title_feedbacks");
 }
 
 <table class="table table-bordered table-hover">
@@ -12,16 +12,10 @@
                 @Html.LocalizationString("id")
             </th>
             <th>
-                @Html.LocalizationString("user_fullname")
-            </th>
-            <th>
                 @Html.LocalizationString("email")
             </th>
             <th>
-                @Html.LocalizationString("user_rolename")
-            </th>
-            <th>
-                @Html.LocalizationString("language")
+                @Html.LocalizationString("feedback_info")
             </th>
         </tr>
     </thead>
@@ -30,10 +24,8 @@
     {
         <tr>
             <td>@item.Id</td>
-            <td>@item.FullName</td>
-            <td>@item.Email</td>
-            <td>@item.RoleName</td>
-            <td>@item.Language</td>
+            <td>@item.UserEmail</td>
+            <td>@item.Info</td>
         </tr>
     }
 </table>

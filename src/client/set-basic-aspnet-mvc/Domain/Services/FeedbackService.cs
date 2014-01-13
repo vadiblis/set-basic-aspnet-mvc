@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,19 +8,15 @@ using set_basic_aspnet_mvc.Helpers;
 
 namespace set_basic_aspnet_mvc.Domain.Services
 {
-    interface IFeedbackService
+    public interface IFeedbackService
     {
         Task<bool> AddFeedback(long userId, string userEmail, string info);
         
         Task<Feedback> GetFeedback(int id);
         
         Task<bool> SetFeedbackToReviewed(int id);
-                
-        // get feedbacks starting from feedback with specific date
-        Task<List<Feedback>> GetFeedbacks(DateTime fromDate, int count, bool forward, bool includingReviewed);
-        
-        // get feedbacks starting from feedback with specific id
-        Task<List<Feedback>> GetFeedbacks(int fromId, int count, bool forward, bool includingReviewed);
+
+        Task<PagedList<Feedback>> GetFeedbacks(int lastId, int page, bool isReviewed = false);
     }
 
     public class FeedbackService : IFeedbackService
@@ -50,6 +45,7 @@ namespace set_basic_aspnet_mvc.Domain.Services
             _feedbackRepo.Create(newFeedback);
 
             var result = _feedbackRepo.SaveChanges();
+
             return Task.FromResult(result);
         }
 
@@ -66,42 +62,29 @@ namespace set_basic_aspnet_mvc.Domain.Services
             if (id < 0) return await Task.FromResult(false);
 
             var feedback = await GetFeedback(id);
-            if (feedback == null) return false;
+            if (feedback == null) return await Task.FromResult(false);
 
-            if (feedback.Reviewed.HasValue && feedback.Reviewed.Value) return await Task.FromResult(true);
-
-            feedback.Reviewed = true;
+            feedback.IsReviewed = true;
             feedback.ReviewedAt = DateTime.Now;
+
             _feedbackRepo.Update(feedback);
 
             var result = _feedbackRepo.SaveChanges();
+
             return await Task.FromResult(result);
         }
 
-        public Task<List<Feedback>> GetFeedbacks(DateTime fromDate, int count, bool forward, bool includingReviewed)
+        public Task<PagedList<Feedback>> GetFeedbacks(int lastId, int page, bool isReviewed = false)
         {
-            if (count < 0) return null;
-            
-            var feedbacks = _feedbackRepo.FindAll();
+            var items = page < 1 ? _feedbackRepo.FindAll()
+                                 : _feedbackRepo.FindAll(x => x.Id > lastId);
 
-            if (!includingReviewed) feedbacks = feedbacks.Where(x => !x.Reviewed.HasValue || !x.Reviewed.Value);
-            if (!forward) feedbacks = feedbacks.Reverse();
+            items = items.Where(x => x.IsReviewed == isReviewed);
 
-            var selectedFeedbacks = feedbacks.SkipWhile(x => x.CreatedAt == fromDate).Take(count).ToList();
-            return Task.FromResult(selectedFeedbacks);
-        }
+            long totalCount = items.Count();
+            items = items.OrderByDescending(x => x.Id).Skip(ConstHelper.PageSize * page).Take(ConstHelper.PageSize);
 
-        public Task<List<Feedback>> GetFeedbacks(int fromId, int count, bool forward, bool includingReviewed)
-        {
-            if (count < 0) return null;
-
-            var feedbacks = _feedbackRepo.FindAll();
-
-            if (!includingReviewed) feedbacks = feedbacks.Where(x => !x.Reviewed.HasValue || !x.Reviewed.Value);
-            if (!forward) feedbacks = feedbacks.Reverse();
-
-            var selectedFeedbacks = feedbacks.SkipWhile(x => x.Id == fromId).Take(count).ToList();
-            return Task.FromResult(selectedFeedbacks);
+            return Task.FromResult(new PagedList<Feedback>(page, ConstHelper.PageSize, totalCount, items));
         }
     }
 }
