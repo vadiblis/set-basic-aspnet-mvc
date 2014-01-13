@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using AutoMapper;
-
+using set_basic_aspnet_mvc.Domain.Contracts;
 using set_basic_aspnet_mvc.Domain.DataTransferObjects;
 using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Domain.Repositories;
@@ -11,24 +11,6 @@ using set_basic_aspnet_mvc.Helpers;
 
 namespace set_basic_aspnet_mvc.Domain.Services
 {
-    public interface IUserService
-    {
-        Task<long?> Create(string fullName, string email, string password, int roleId, string language);
-        Task<bool> IsEmailExists(string email);
-        Task<bool> Authenticate(string email, string password);
-
-        Task<bool> RequestPasswordReset(string email);
-        Task<bool> IsPasswordResetRequestValid(string email, string token);
-        Task<bool> ChangePassword(string email, string token, string password);
-
-        Task<bool> ChangeStatus(long userId, long updatedBy, bool isActive);
-
-        Task<UserDto> Get(long id);
-        Task<UserDto> GetByEmail(string email);
-
-        Task<PagedList<UserDto>> GetUsers(int pageNumber);
-    }
-
     public class UserService : IUserService
     {
         const int LOGIN_TRY_COUNT = 5;

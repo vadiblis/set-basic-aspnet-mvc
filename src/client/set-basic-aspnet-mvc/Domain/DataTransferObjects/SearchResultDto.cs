@@ -1,6 +1,4 @@
-﻿using set_basic_aspnet_mvc.Domain.DataTransferObjects;
-
-namespace set_basic_aspnet_mvc.Domain.Entities
+﻿namespace set_basic_aspnet_mvc.Domain.DataTransferObjects
 {
     public class SearchResultDto : BaseDto
     {

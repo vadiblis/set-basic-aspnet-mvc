@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using AutoMapper;
-
+using set_basic_aspnet_mvc.Domain.Contracts;
 using set_basic_aspnet_mvc.Domain.DataTransferObjects;
 using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Domain.Repositories;
@@ -11,17 +11,6 @@ using set_basic_aspnet_mvc.Helpers;
 
 namespace set_basic_aspnet_mvc.Domain.Services
 {
-    public interface IFeedbackService
-    {
-        Task<bool> AddFeedback(long userId, string userEmail, string info);
-
-        Task<FeedbackDto> GetFeedback(int id);
-        
-        Task<bool> SetFeedbackToReviewed(int id);
-
-        Task<PagedList<FeedbackDto>> GetFeedbacks(int page, bool isReviewed = false);
-    }
-
     public class FeedbackService : IFeedbackService
     {
         private readonly IRepository<Feedback> _feedbackRepo;

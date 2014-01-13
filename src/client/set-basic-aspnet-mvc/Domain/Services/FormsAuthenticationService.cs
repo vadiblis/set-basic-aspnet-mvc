@@ -1,14 +1,8 @@
 ﻿using System.Web.Security;
+using set_basic_aspnet_mvc.Domain.Contracts;
 
 namespace set_basic_aspnet_mvc.Domain.Services
 {
-    public interface IFormsAuthenticationService
-    {
-        void SignIn(long id, string name, string email, int roleId, bool createPersistentCookie);
-
-        void SignOut();
-    }
-
     public class FormsAuthenticationService : IFormsAuthenticationService
     {
         public void SignIn(long id, string name, string email, int roleId, bool createPersistentCookie)

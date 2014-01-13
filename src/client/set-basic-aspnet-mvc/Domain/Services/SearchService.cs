@@ -2,18 +2,14 @@
 using System.Linq; 
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using set_basic_aspnet_mvc.Domain.Contracts;
+using set_basic_aspnet_mvc.Domain.DataTransferObjects;
 using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Domain.Repositories;
 
 
 namespace set_basic_aspnet_mvc.Domain.Services
 {
-    public interface ISearchService
-    {
-        Task<List<SearchResultDto>> Query(string text);
-    }
-
     public class SearchService : ISearchService
     {
         private readonly IRepository<User> _userRepository;

@@ -105,10 +105,6 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\packages\AutoMapper.3.1.1\lib\net40\AutoMapper.Net4.dll">
-      <Link>AutoMapper.Net4.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="packages.config" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\Users.cshtml" />
@@ -167,10 +163,15 @@
     <Compile Include="Domain\Entities\User.cs" />
     <Compile Include="Domain\Repositories\Repository.cs" />
     <Compile Include="Domain\Services\FeedbackService.cs" />
+    <Compile Include="Domain\Contracts\IFeedbackService.cs" />
+    <Compile Include="Domain\Contracts\IFormsAuthenticationService.cs" />
+    <Compile Include="Domain\Contracts\IMessageService.cs" />
+    <Compile Include="Domain\Contracts\IReportService.cs" />
+    <Compile Include="Domain\Contracts\ISearchService.cs" />
+    <Compile Include="Domain\Contracts\IUserService.cs" />
     <Compile Include="Domain\Services\MessageService.cs" />
     <Compile Include="Domain\Services\ReportService.cs" />
     <Compile Include="Domain\Services\SearchService.cs" />
-    <Compile Include="Domain\Services\TagService.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

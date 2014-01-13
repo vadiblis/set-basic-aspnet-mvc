@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 
 using set_basic_aspnet_mvc.Controllers;
+using set_basic_aspnet_mvc.Domain.Contracts;
 using set_basic_aspnet_mvc.Domain.DataTransferObjects;
 using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Domain.Services;

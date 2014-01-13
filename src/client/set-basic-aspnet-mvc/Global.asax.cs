@@ -19,6 +19,8 @@ namespace set_basic_aspnet_mvc
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
+            AutoMapperConfiguration.Configure();
+
             PrepareIocContainer();
         }
 

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using Moq;
 using NUnit.Framework;
-
+using set_basic_aspnet_mvc.Domain.Contracts;
 using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Domain.Repositories;
 using set_basic_aspnet_mvc.Domain.Services;
