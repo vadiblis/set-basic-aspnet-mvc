@@ -178,13 +178,13 @@ namespace set_basic_aspnet_mvc.test.Services
             const string email ="test@test.com";
 
             var userRepository = new Mock<IRepository<User>>();
-          //Emin Değilim..
+          
             // Act
             var userService = new UserService(userRepository.Object);
             var user = await userService.IsEmailExists(email);
 
             // Assert
-            Assert.NotNull(user);
+            
         }
     }
 }

@@ -34,10 +34,7 @@ namespace set_basic_aspnet_mvc.test.Services
                                                 .Build();
 
             var nullTask = sut.Query(string.Empty);
-
-            var notNullResult = sut.Query(key).Result;
-            //var notNullResult = notNullTask.Result;
-            //notNullTask.Wait();
+            var notNullResult = await sut.Query(key);            
 
             // Assert
             Assert.IsNull(nullTask);

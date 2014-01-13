@@ -7,6 +7,7 @@ using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
+
 using set_basic_aspnet_mvc.Domain.Services;
 using set_basic_aspnet_mvc.Domain.Repositories;
 

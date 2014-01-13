@@ -11,7 +11,7 @@ namespace set_basic_aspnet_mvc.Domain.Services
 {
     public interface ISearchService
     {
-        Task<List<SearchResult>> Query(string text);
+        Task<List<SearchResultDto>> Query(string text);
     }
 
     public class SearchService : ISearchService
@@ -23,7 +23,7 @@ namespace set_basic_aspnet_mvc.Domain.Services
             _userRepository = userRepository;
         }
 
-        public Task<List<SearchResult>> Query(string text)
+        public Task<List<SearchResultDto>> Query(string text)
         {
             if (string.IsNullOrWhiteSpace(text)) return null;
 
@@ -33,7 +33,7 @@ namespace set_basic_aspnet_mvc.Domain.Services
                 keys = text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             }
 
-            var result = new List<SearchResult>();
+            var result = new List<SearchResultDto>();
 
             var users = _userRepository.FindAll();
             foreach (var key in keys)
@@ -52,7 +52,7 @@ namespace set_basic_aspnet_mvc.Domain.Services
                     exp = exp.Substring(0, 15);
                 }
 
-                result.Add(new SearchResult
+                result.Add(new SearchResultDto
                 {
                     Url = string.Format("/user/detail/{0}", item.Id),
                     Name = exp,

@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+
 using Moq;
 using NUnit.Framework;
+
 using set_basic_aspnet_mvc.Controllers;
 using set_basic_aspnet_mvc.Domain.Entities;
-using set_basic_aspnet_mvc.Domain.Repositories;
 using set_basic_aspnet_mvc.Domain.Services;
 using set_basic_aspnet_mvc.Models;
 using set_basic_aspnet_mvc.test.Builders;
@@ -22,7 +22,7 @@ namespace set_basic_aspnet_mvc.test.Controllers
             // Arrange
             var searchService = new Mock<ISearchService>(); 
 
-            searchService.Setup(x => x.Query("test")).Returns(Task.FromResult(new List<SearchResult>())); 
+            searchService.Setup(x => x.Query("test")).Returns(Task.FromResult(new List<SearchResultDto>())); 
 
             // Act
             var sut = new SearchControllerBuilder().WithSearchService(searchService.Object)
