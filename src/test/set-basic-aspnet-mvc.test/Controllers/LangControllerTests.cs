@@ -8,7 +8,6 @@ using set_basic_aspnet_mvc.test.TestHelpers;
 using set_basic_aspnet_mvc.test.Builders;
 using System.Web;
 
-
 namespace set_basic_aspnet_mvc.test.Controllers
 {
     public class LangControllerTests

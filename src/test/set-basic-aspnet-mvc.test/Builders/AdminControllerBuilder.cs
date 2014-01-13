@@ -2,8 +2,6 @@
 
 using set_basic_aspnet_mvc.Controllers;
 using set_basic_aspnet_mvc.Domain.Contracts;
-using set_basic_aspnet_mvc.Domain.Services;
-
 
 namespace set_basic_aspnet_mvc.test.Builders
 {
@@ -32,7 +30,7 @@ namespace set_basic_aspnet_mvc.test.Builders
             return this;
         }
 
-        internal AdminControllerBuilder WithFeedbackServiceService(IFeedbackService feedbackService)
+        internal AdminControllerBuilder WithFeedbacService(IFeedbackService feedbackService)
         {
             _feedbackService = feedbackService;
             return this;

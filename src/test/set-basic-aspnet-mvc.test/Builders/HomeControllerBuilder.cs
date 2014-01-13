@@ -4,11 +4,6 @@ namespace set_basic_aspnet_mvc.test.Builders
 {
     public class HomeControllerBuilder
     {
-        public HomeControllerBuilder()
-        {
-
-        }
-
         internal HomeController Build()
         {
             return new HomeController();

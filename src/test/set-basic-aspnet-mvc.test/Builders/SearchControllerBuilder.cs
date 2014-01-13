@@ -1,7 +1,5 @@
 ﻿using set_basic_aspnet_mvc.Controllers;
 using set_basic_aspnet_mvc.Domain.Contracts;
-using set_basic_aspnet_mvc.Domain.Services;
-using set_basic_aspnet_mvc.test.Controllers;
 
 namespace set_basic_aspnet_mvc.test.Builders
 {
