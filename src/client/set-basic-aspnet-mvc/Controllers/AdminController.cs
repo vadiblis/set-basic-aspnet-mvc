@@ -40,7 +40,7 @@ namespace set_basic_aspnet_mvc.Controllers
         {
             var page = id;
 
-            var items = await _userService.GetUsers(lastId, page);
+            var items = await _userService.GetUsers(page);
             var model = items.Items.Select(UserModel.Map).ToList();
 
             return View(model);
@@ -51,7 +51,7 @@ namespace set_basic_aspnet_mvc.Controllers
         {
             var page = id;
 
-            var items = await _feedbackService.GetFeedbacks(lastId, page);
+            var items = await _feedbackService.GetFeedbacks(page);
             var model = items.Items.Select(FeedbackModel.Map).ToList();
 
             return View(model);

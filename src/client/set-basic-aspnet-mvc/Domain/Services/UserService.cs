@@ -22,7 +22,7 @@ namespace set_basic_aspnet_mvc.Domain.Services
         Task<User> Get(long id);
         Task<User> GetByEmail(string email);
 
-        Task<PagedList<User>> GetUsers(int lastId, int page);
+        Task<PagedList<User>> GetUsers(int pageNumber);
     }
 
     public class UserService : IUserService
@@ -38,7 +38,7 @@ namespace set_basic_aspnet_mvc.Domain.Services
 
         public async Task<long?> Create(string fullName, string email, string password, int roleId, string language)
         {
-            var img = GravatarHelper.GetGravatarURL(email, 55, "mm");
+            var img = GravatarHelper.GetGravatarURL(email, 55);
             var user = new User
             {
                 Email = email,
@@ -122,15 +122,22 @@ namespace set_basic_aspnet_mvc.Domain.Services
             return Task.FromResult(user);
         }
 
-        public Task<PagedList<User>> GetUsers(int lastId, int page)
+        public Task<PagedList<User>> GetUsers(int pageNumber)
         {
-            var items = page < 1 ? _userRepo.FindAll()
-                                 : _userRepo.FindAll(x => x.Id > lastId);
+            if (pageNumber < 1)
+            {
+                pageNumber = 1;
+            }
+
+            pageNumber--;
+
+            var items = _userRepo.FindAll();
 
             long totalCount = items.Count();
-            items = items.OrderByDescending(x => x.Id).Skip(ConstHelper.PageSize * page).Take(ConstHelper.PageSize);
 
-            return Task.FromResult(new PagedList<User>(page, ConstHelper.PageSize, totalCount, items));
+            items = items.OrderByDescending(x => x.Id).Skip(ConstHelper.PageSize * pageNumber).Take(ConstHelper.PageSize);
+
+            return Task.FromResult(new PagedList<User>(pageNumber, ConstHelper.PageSize, totalCount, items.ToList()));
         }
 
         public async Task<bool> IsEmailExists(string email)

@@ -5,7 +5,7 @@ namespace set_basic_aspnet_mvc.Domain.Entities
 {
     public class PagedList<TEntity> where TEntity : BaseEntity
     {
-        public int Index { get; set; }
+        public int Number { get; set; }
         public int Size { get; set; }
         public long TotalCount { get; set; }
         public int TotalPageCount { get; set; }
@@ -13,17 +13,17 @@ namespace set_basic_aspnet_mvc.Domain.Entities
         public bool HasNextPage { get; set; }
         public List<TEntity> Items { get; set; }
 
-        public PagedList(int pageIndex, int pageSize, long totalCount, IEnumerable<TEntity> source)
+        public PagedList(int pageNumber, int pageSize, long totalCount, List<TEntity> source)
         {
             Items = new List<TEntity>();
             Items.AddRange(source);
 
-            Index = pageIndex;
+            Number = pageNumber;
             Size = pageSize;
             TotalCount = totalCount;
             TotalPageCount = (int)Math.Ceiling(totalCount / (double)pageSize);
-            HasPreviousPage = Index > 1;
-            HasNextPage = Index < TotalPageCount;
+            HasPreviousPage = Number > 1;
+            HasNextPage = Number < TotalPageCount;
         }
     }
 }
