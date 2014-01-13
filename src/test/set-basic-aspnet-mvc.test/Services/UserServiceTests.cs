@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Threading;
-
+using System.Web.UI;
 using Moq;
 using NUnit.Framework;
 
 using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Domain.Repositories;
 using set_basic_aspnet_mvc.Domain.Services;
+using set_basic_aspnet_mvc.test.Builders;
 
 namespace set_basic_aspnet_mvc.test.Services
 {
@@ -15,7 +16,7 @@ namespace set_basic_aspnet_mvc.test.Services
     public class UserServiceTests
     {
         [Test]
-        public void create_should_return_user_id()
+        public async void create_should_return_user_id()
         {
             // Arrange
             var user = new User { FullName = "test", Email = "test@test.com", RoleId = SetRole.User.Value, Language = Thread.CurrentThread.CurrentUICulture.Name };
@@ -24,37 +25,48 @@ namespace set_basic_aspnet_mvc.test.Services
             userRepository.Setup(x => x.Create(user)).Returns(user);
             userRepository.Setup(x => x.SaveChanges()).Returns(true);
 
-            // Act
-            var userService = new UserService(userRepository.Object);
-            var userId = userService.Create(user.FullName, user.Email, "password", user.RoleId, user.Language);
+            // Act 
+            var sut = new UserServiceBuilder().WithUserRespository(userRepository.Object)
+                                              .Build(); 
+            var userId = await sut.Create(user.FullName, user.Email, "password", user.RoleId, user.Language);
 
             // Assert
+            Assert.NotNull(userId);
+            Assert.IsInstanceOf<IUserService>(sut);
+            Assert.IsAssignableFrom<long>(userId);
+
             userRepository.Verify(x => x.Create(It.IsAny<User>()), Times.Once);
             userRepository.Verify(x => x.SaveChanges(), Times.AtLeastOnce);
 
-            Assert.NotNull(userId);
         }
 
         [Test]
-        public void authenticate_should_return_user_result()
+        public async void authenticate_should_return_with_bool()
         {
-            // Arrange
-            var user = new User { FullName = "test", Email = "test@test.com", RoleId = SetRole.User.Value, Language = Thread.CurrentThread.CurrentUICulture.Name };
-            var userRepository = new Mock<IRepository<User>>();
+            // Arrange 
+            var user = new User { FullName = "test", Email = "test@test.com", RoleId = SetRole.User.Value, PasswordHash = BCrypt.Net.BCrypt.HashPassword("password"), Language = Thread.CurrentThread.CurrentUICulture.Name };
+            var userRepository = new Mock<IRepository<User>>(); 
+            
+            userRepository.Setup(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>())).Returns(user); 
+            userRepository.Setup(x => x.Update(user)).Returns(user);
 
             // Act
-            var userService = new UserService(userRepository.Object);
-            var userId = userService.Create(user.FullName, user.Email, "password", user.RoleId, user.Language);
+            var  sut = new UserServiceBuilder().WithUserRespository(userRepository.Object)
+                                              .Build();
+            var result = await sut.Authenticate(user.Email, user.PasswordHash);
 
             // Assert
-            userRepository.Verify(x => x.Create(It.IsAny<User>()), Times.Once);
-            userRepository.Verify(x => x.SaveChanges(), Times.AtLeastOnce);
+            Assert.NotNull(result);
+            Assert.IsInstanceOf<IUserService>(sut);
+            Assert.IsAssignableFrom<bool>(result);
 
-            Assert.NotNull(userId);
+            userRepository.Verify(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>()), Times.Once); 
+            userRepository.Verify(x => x.Update(It.IsAny<User>()), Times.Once);
+            userRepository.Verify(x => x.SaveChanges(), Times.AtLeastOnce); 
         }
 
         [Test]
-        public async void get_user_by_email_should_return_user()
+        public async void get_user_by_email_should_return_with_user()
         {
             // Arrange
             const string email = "test@test.com";
@@ -63,17 +75,21 @@ namespace set_basic_aspnet_mvc.test.Services
             userRepository.Setup(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>())).Returns(new User { Email = email });
 
             // Act
-            var userService = new UserService(userRepository.Object);
-            var user = await userService.GetByEmail(email);
+            var sut = new UserServiceBuilder().WithUserRespository(userRepository.Object)
+                                              .Build();
+            var user = await sut.GetByEmail(email);
 
             // Assert
             Assert.NotNull(user);
             Assert.AreEqual(user.Email, email);
+            Assert.IsInstanceOf<IUserService>(sut);
+            Assert.IsAssignableFrom<User>(user);
+
             userRepository.Verify(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>()), Times.Once);
         }
 
         [Test]
-        public void change_status_test()
+        public async void change_status_should_return_with_bool()
         {
             // Arrange
             const long userId = 8;
@@ -83,13 +99,18 @@ namespace set_basic_aspnet_mvc.test.Services
             userRepository.Setup(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>())).Returns(new User { Id = userId });
 
             // Act
-            var userService = new UserService(userRepository.Object);
-            var user = userService.ChangeStatus(userId, updatedBy, isActive);
+            var sut = new UserServiceBuilder().WithUserRespository(userRepository.Object)
+                                              .Build();
+            var result = await sut.ChangeStatus(userId, updatedBy, isActive);
 
             // Assert
-            Assert.NotNull(user);
+            Assert.NotNull(result); 
+            Assert.IsInstanceOf<IUserService>(sut);
+            Assert.IsAssignableFrom<bool>(result);
+
+            userRepository.Verify(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>()), Times.AtLeastOnce);
             userRepository.Verify(x => x.Update(It.IsAny<User>()), Times.Once);
-            userRepository.Verify(x => x.SaveChanges(), Times.AtLeastOnce);
+            userRepository.Verify(x => x.SaveChanges(), Times.AtLeastOnce);  
         }
 
         [Test]
@@ -102,16 +123,20 @@ namespace set_basic_aspnet_mvc.test.Services
             userRepository.Setup(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>())).Returns(new User { Id = id });
 
             // Act
-            var userService = new UserService(userRepository.Object);
-            var user = await userService.Get(id);
+            var sut = new UserServiceBuilder().WithUserRespository(userRepository.Object)
+                                              .Build();
+            var user = await sut.Get(id);
 
             // Assert
             Assert.NotNull(user);
+            Assert.IsInstanceOf<IUserService>(sut);
+            Assert.IsAssignableFrom<User>(user);
+
             userRepository.Verify(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>()), Times.Once);
         }
 
         [Test]
-        public void change_password_test()
+        public async void change_password_return_with_bool()
         {
             // Arrange
             const string email = "test@test.com";
@@ -122,17 +147,22 @@ namespace set_basic_aspnet_mvc.test.Services
             userRepository.Setup(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>())).Returns(new User { Email = email, PasswordResetToken = token, PasswordHash = BCrypt.Net.BCrypt.HashPassword(password), PasswordResetRequestedAt = DateTime.Now });
 
             // Act
-            var userService = new UserService(userRepository.Object);
-            var user = userService.ChangePassword(email, token, password);
+            var sut = new UserServiceBuilder().WithUserRespository(userRepository.Object)
+                                              .Build();
+            var result = await sut.ChangePassword(email, token, password);
 
             // Assert
-            Assert.NotNull(user);
+            Assert.NotNull(result);
+            Assert.IsInstanceOf<IUserService>(sut);
+            Assert.IsAssignableFrom<bool>(result);
+
             userRepository.Verify(x => x.Update(It.IsAny<User>()), Times.Once);
             userRepository.Verify(x => x.SaveChanges(), Times.AtLeastOnce);
+            userRepository.Verify(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>()), Times.AtLeastOnce);
         }
 
         [Test]
-        public void request_password_reset_test()
+        public async void request_password_reset_return_with_bool()
         {
             // Arrange
             const string email = "test@test.com";
@@ -144,17 +174,22 @@ namespace set_basic_aspnet_mvc.test.Services
                           .Returns(new User { Email = email, PasswordResetToken = token, PasswordResetRequestedAt = null, UpdatedAt = DateTime.Now, UpdatedBy = userId });
 
             // Act
-            var userService = new UserService(userRepository.Object);
-            var user = userService.RequestPasswordReset(email);
+            var sut = new UserServiceBuilder().WithUserRespository(userRepository.Object)
+                                             .Build();
+            var result = await sut.RequestPasswordReset(email);
 
             // Assert
-            Assert.NotNull(user);
+            Assert.NotNull(result);
+            Assert.IsInstanceOf<IUserService>(sut);
+            Assert.IsAssignableFrom<bool>(result);
+
             userRepository.Verify(x => x.Update(It.IsAny<User>()), Times.Once);
             userRepository.Verify(x => x.SaveChanges(), Times.AtLeastOnce);
+            userRepository.Verify(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>()), Times.AtLeastOnce);
         }
 
         [Test]
-        public void is_password_reset_request_valid_test()
+        public async void is_password_reset_request_valid_return_with_bool()
         {
             // Arrange
             const string email = "test@test.com";
@@ -164,27 +199,34 @@ namespace set_basic_aspnet_mvc.test.Services
             userRepository.Setup(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>())).Returns(new User { Email = email, PasswordResetToken = token});
 
             // Act
-            var userService = new UserService(userRepository.Object);
-            var user = userService.IsPasswordResetRequestValid(email,token);
+            var sut = new UserServiceBuilder().WithUserRespository(userRepository.Object)
+                                             .Build();
+            var result = await sut.IsPasswordResetRequestValid(email,token);
 
             // Assert
-            Assert.NotNull(user);
+            Assert.NotNull(result); 
+            Assert.IsInstanceOf<IUserService>(sut);
+            Assert.IsAssignableFrom<bool>(result);
+            userRepository.Verify(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>()), Times.AtLeastOnce); 
         }
 
         [Test]
-        public async void is_email_exists_test()
+        public async void is_email_exists_return_with_bool()
         {
             // Arrange
-            const string email ="test@test.com";
-
+            const string email ="test@test.com"; 
             var userRepository = new Mock<IRepository<User>>();
-          
+
             // Act
-            var userService = new UserService(userRepository.Object);
-            var user = await userService.IsEmailExists(email);
+            var sut = new UserServiceBuilder().WithUserRespository(userRepository.Object)
+                                             .Build();
+            var result = await sut.IsEmailExists(email);
 
             // Assert
-            
+
+            Assert.NotNull(result);
+            Assert.IsInstanceOf<IUserService>(sut);
+            Assert.IsAssignableFrom<bool>(result); 
         }
     }
 }

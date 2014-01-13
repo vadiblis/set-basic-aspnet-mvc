@@ -59,7 +59,7 @@ namespace set_basic_aspnet_mvc.test.Controllers
             // Assert
             Assert.NotNull(view);
             Assert.AreEqual(view.Url, "/user/detail");
-            Assert.IsInstanceOf(typeof(BaseController), sut);
+            Assert.IsInstanceOf<BaseController>(sut); 
 
             sut.AssertPostAttribute(actionName, new[] { typeof(UserModel) });
             sut.AssertAllowAnonymousAttribute(actionName, new[] { typeof(UserModel) });
@@ -141,7 +141,9 @@ namespace set_basic_aspnet_mvc.test.Controllers
 
             // Assert
             Assert.NotNull(view);
+            Assert.AreEqual(view.Url, "/");
             Assert.IsInstanceOf<BaseController>(sut);
+            Assert.IsAssignableFrom<RedirectResult>(view);
 
             sut.AssertGetAttribute(actionName);
         }
@@ -167,7 +169,7 @@ namespace set_basic_aspnet_mvc.test.Controllers
         }
 
         [Test]
-        public void password_change_should_return_with_password_change_model()
+        public async void password_change_should_return_with_password_change_model()
         {
             // Arrange
             const string actionName = "PasswordChange";
@@ -180,9 +182,8 @@ namespace set_basic_aspnet_mvc.test.Controllers
             // Act
             var sut = new UserControllerBuilder().WithUserService(userService.Object)
                                                  .Build();
-            var task = sut.PasswordChange(email, token);
-            //task.Wait();
-            var view = task.Result as ViewResult;
+            var task = await sut.PasswordChange(email, token); 
+            var view = task as ViewResult;
             // Assert
             Assert.NotNull(view);
             Assert.NotNull(view.Model);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Collections.Generic;
 
 using Moq;
 using NUnit.Framework;
@@ -9,7 +10,6 @@ using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Domain.Repositories;
 using set_basic_aspnet_mvc.Domain.Services;
 using set_basic_aspnet_mvc.test.Builders;
-using System.Collections.Generic;
 
 namespace set_basic_aspnet_mvc.test.Services
 {
@@ -33,8 +33,8 @@ namespace set_basic_aspnet_mvc.test.Services
             var sut = new SearchServiceBuilder().WithUserRespository(userRepository.Object)
                                                 .Build();
 
-            var nullTask = sut.Query(string.Empty);
-            var notNullResult = await sut.Query(key);            
+            var nullTask = sut.Query(string.Empty); 
+            var notNullResult = await sut.Query(key); 
 
             // Assert
             Assert.IsNull(nullTask);

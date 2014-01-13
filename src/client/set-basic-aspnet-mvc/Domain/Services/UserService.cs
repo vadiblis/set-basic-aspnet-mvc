@@ -10,9 +10,6 @@ namespace set_basic_aspnet_mvc.Domain.Services
 {
     public interface IUserService
     {
-        //Task<List<User>> GetAll(int page, int latestId);
-        //Task<List<User>> GetAllByRoleId(int roleId, int page, int latestId);
-
         Task<long?> Create(string fullName, string email, string password, int roleId, string language);
         Task<bool> Authenticate(string email, string password);
         Task<bool> ChangeStatus(long userId, long updatedBy, bool isActive);
@@ -24,6 +21,8 @@ namespace set_basic_aspnet_mvc.Domain.Services
 
         Task<User> Get(long id);
         Task<User> GetByEmail(string email);
+
+        Task<PagedList<User>> GetUsers(int lastId, int page);
     }
 
     public class UserService : IUserService
@@ -122,6 +121,18 @@ namespace set_basic_aspnet_mvc.Domain.Services
             var user = _userRepo.FindOne(x => x.Email == email);
             return Task.FromResult(user);
         }
+
+        public Task<PagedList<User>> GetUsers(int lastId, int page)
+        {
+            var items = page < 1 ? _userRepo.FindAll()
+                                 : _userRepo.FindAll(x => x.Id > lastId);
+
+            long totalCount = items.Count();
+            items = items.OrderByDescending(x => x.Id).Skip(ConstHelper.PageSize * page).Take(ConstHelper.PageSize);
+
+            return Task.FromResult(new PagedList<User>(page, ConstHelper.PageSize, totalCount, items));
+        }
+
         public async Task<bool> IsEmailExists(string email)
         {
             return await Task.FromResult(false);
