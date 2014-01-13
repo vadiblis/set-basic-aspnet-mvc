@@ -2,6 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 
+using AutoMapper;
+
+using set_basic_aspnet_mvc.Domain.DataTransferObjects;
 using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Domain.Repositories;
 using set_basic_aspnet_mvc.Helpers;
@@ -11,24 +14,26 @@ namespace set_basic_aspnet_mvc.Domain.Services
     public interface IUserService
     {
         Task<long?> Create(string fullName, string email, string password, int roleId, string language);
-        Task<bool> Authenticate(string email, string password);
-        Task<bool> ChangeStatus(long userId, long updatedBy, bool isActive);
-
         Task<bool> IsEmailExists(string email);
+        Task<bool> Authenticate(string email, string password);
+
         Task<bool> RequestPasswordReset(string email);
         Task<bool> IsPasswordResetRequestValid(string email, string token);
         Task<bool> ChangePassword(string email, string token, string password);
 
-        Task<User> Get(long id);
-        Task<User> GetByEmail(string email);
+        Task<bool> ChangeStatus(long userId, long updatedBy, bool isActive);
 
-        Task<PagedList<User>> GetUsers(int pageNumber);
+        Task<UserDto> Get(long id);
+        Task<UserDto> GetByEmail(string email);
+
+        Task<PagedList<UserDto>> GetUsers(int pageNumber);
     }
 
     public class UserService : IUserService
     {
         const int LOGIN_TRY_COUNT = 5;
         const int PASSWORD_RESET_VALIDATION_MINUTES = -60;
+        const int GRAVATAR_IMG_SIZE = 55;
 
         private readonly IRepository<User> _userRepo;
         public UserService(IRepository<User> userRepo)
@@ -38,7 +43,7 @@ namespace set_basic_aspnet_mvc.Domain.Services
 
         public async Task<long?> Create(string fullName, string email, string password, int roleId, string language)
         {
-            var img = GravatarHelper.GetGravatarURL(email, 55);
+            var img = GravatarHelper.GetGravatarURL(email, GRAVATAR_IMG_SIZE);
             var user = new User
             {
                 Email = email,
@@ -58,6 +63,12 @@ namespace set_basic_aspnet_mvc.Domain.Services
             return await Task.FromResult(user.Id);
         }
 
+        public async Task<bool> IsEmailExists(string email)
+        {
+            var result = _userRepo.AsQueryable(null).Any(x => x.Email == email);
+            return await Task.FromResult(result);
+        }
+
         public Task<bool> Authenticate(string email, string password)
         {
             if (string.IsNullOrEmpty(password) && email.IsEmail()) return Task.FromResult(false);
@@ -65,6 +76,7 @@ namespace set_basic_aspnet_mvc.Domain.Services
             var user = _userRepo.FindOne(x => x.Email == email
                                               && x.PasswordHash != null
                                               && x.LoginTryCount < LOGIN_TRY_COUNT);
+
             if (user == null) return Task.FromResult(false);
 
             var result = false;
@@ -87,75 +99,18 @@ namespace set_basic_aspnet_mvc.Domain.Services
 
             return Task.FromResult(result);
         }
-
-        public Task<bool> ChangeStatus(long userId, long updatedBy, bool isActive)
-        {
-            if (userId < 1 || updatedBy < 1) return Task.FromResult(false);
-
-            var user = _userRepo.FindOne(x => x.Id == userId);
-            if (user == null) return Task.FromResult(false);
-
-            var updatedByUser = _userRepo.FindOne(x => x.Id == updatedBy);
-            if (updatedByUser == null) return Task.FromResult(false);
-
-            user.UpdatedAt = DateTime.Now;
-            user.UpdatedBy = updatedBy;
-            user.IsActive = !isActive;
-            _userRepo.Update(user);
-
-            if (!_userRepo.SaveChanges()) Task.FromResult(false);
-
-            return Task.FromResult(true);
-        }
-
-        public Task<User> Get(long id)
-        {
-            var user = _userRepo.FindOne(x => x.Id == id);
-            return Task.FromResult(user);
-        }
-
-        public Task<User> GetByEmail(string email)
-        {
-            if (!email.IsEmail()) return null;
-
-            var user = _userRepo.FindOne(x => x.Email == email);
-            return Task.FromResult(user);
-        }
-
-        public Task<PagedList<User>> GetUsers(int pageNumber)
-        {
-            if (pageNumber < 1)
-            {
-                pageNumber = 1;
-            }
-
-            pageNumber--;
-
-            var items = _userRepo.FindAll();
-
-            long totalCount = items.Count();
-
-            items = items.OrderByDescending(x => x.Id).Skip(ConstHelper.PageSize * pageNumber).Take(ConstHelper.PageSize);
-
-            return Task.FromResult(new PagedList<User>(pageNumber, ConstHelper.PageSize, totalCount, items.ToList()));
-        }
-
-        public async Task<bool> IsEmailExists(string email)
-        {
-            return await Task.FromResult(false);
-        }
+        
 
         public async Task<bool> RequestPasswordReset(string email)
         {
             if (string.IsNullOrEmpty(email)) return await Task.FromResult(false);
 
-            var user = await GetByEmail(email);
+            var user = _userRepo.FindOne(x => x.Email == email);
             if (user == null) return await Task.FromResult(false);
 
-            //1 saat içinde istekde bulunmuş mu?
             if (user.PasswordResetRequestedAt != null
                 && user.PasswordResetRequestedAt.Value.AddMinutes(PASSWORD_RESET_VALIDATION_MINUTES * -1) > DateTime.Now) return await Task.FromResult(false);
-                       
+
             var token = Guid.NewGuid().ToString().Replace("-", string.Empty);
 
             user.PasswordResetToken = token;
@@ -179,18 +134,18 @@ namespace set_basic_aspnet_mvc.Domain.Services
             //                MemberId = model.MemberId
             //            });
 
-            return await Task.FromResult(true);                 
+            return await Task.FromResult(true);
         }
 
         public async Task<bool> IsPasswordResetRequestValid(string email, string token)
         {
             if (string.IsNullOrEmpty(email)) return await Task.FromResult(false);
 
-            var user = await GetByEmail(email);
+            var user = _userRepo.FindOne(x => x.Email == email);
             if (user == null) return await Task.FromResult(false);
 
             if (user.PasswordResetRequestedAt == null) return await Task.FromResult(false);
-            
+
             if (user.PasswordResetToken != token
                 && user.Email != email
                 && user.PasswordResetRequestedAt.Value < DateTime.Now.AddMinutes(PASSWORD_RESET_VALIDATION_MINUTES)) return await Task.FromResult(false);
@@ -203,7 +158,7 @@ namespace set_basic_aspnet_mvc.Domain.Services
             var isValid = await IsPasswordResetRequestValid(email, token);
             if (!isValid) return await Task.FromResult(false);
 
-            var user = await GetByEmail(email);
+            var user = _userRepo.FindOne(x => x.Email == email);
 
             user.PasswordResetToken = null;
             user.PasswordResetRequestedAt = null;
@@ -219,25 +174,65 @@ namespace set_basic_aspnet_mvc.Domain.Services
             return await Task.FromResult(true);
         }
 
+        
+        public Task<bool> ChangeStatus(long userId, long updatedBy, bool isActive)
+        {
+            if (userId < 1 || updatedBy < 1) return Task.FromResult(false);
 
-        //public Task<List<User>> GetAll()
-        //{
-        //    var users = _userRepo.FindAll().ToList();
-        //    return Task.FromResult(users);
-        //}
+            var user = _userRepo.FindOne(x => x.Id == userId);
+            if (user == null) return Task.FromResult(false);
 
-        //public Task<List<User>> GetAllByRoleId(int roleId)
-        //{
-        //    var users = _userRepo.FindAll(x => x.RoleId == roleId).ToList();
-        //    return Task.FromResult(users);
-        //}
+            var updatedByUser = _userRepo.FindOne(x => x.Id == updatedBy);
+            if (updatedByUser == null) return Task.FromResult(false);
+
+            user.UpdatedAt = DateTime.Now;
+            user.UpdatedBy = updatedBy;
+            user.IsActive = !isActive;
+            _userRepo.Update(user);
+
+            if (!_userRepo.SaveChanges()) Task.FromResult(false);
+
+            return Task.FromResult(true);
+        }
 
 
+        public Task<UserDto> Get(long id)
+        {
+            var user = _userRepo.FindOne(x => x.Id == id);
 
+            var result = Mapper.Map<User, UserDto>(user);
+            return Task.FromResult(result);
+        }
 
+        public Task<UserDto> GetByEmail(string email)
+        {
+            if (!email.IsEmail()) return null;
 
+            var user = _userRepo.FindOne(x => x.Email == email);
 
+            var result = Mapper.Map<User, UserDto>(user);
+            return Task.FromResult(result);
+        }
 
+        public Task<PagedList<UserDto>> GetUsers(int pageNumber)
+        {
+            if (pageNumber < 1)
+            {
+                pageNumber = 1;
+            }
+
+            pageNumber--;
+
+            var items = _userRepo.FindAll();
+
+            long totalCount = items.Count();
+
+            items = items.OrderByDescending(x => x.Id).Skip(ConstHelper.PageSize * pageNumber).Take(ConstHelper.PageSize);
+
+            var result = items.Select(Mapper.Map<User, UserDto>).ToList();
+
+            return Task.FromResult(new PagedList<UserDto>(pageNumber, ConstHelper.PageSize, totalCount, result));
+        }
 
     }
 }

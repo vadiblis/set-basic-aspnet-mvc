@@ -1,7 +1,8 @@
 ﻿using System.Web.Mvc;
 using System.Threading;
 using System.Threading.Tasks;
-
+using AutoMapper;
+using set_basic_aspnet_mvc.Domain.DataTransferObjects;
 using set_basic_aspnet_mvc.Domain.Services;
 using set_basic_aspnet_mvc.Models;
 using set_basic_aspnet_mvc.Helpers;
@@ -169,7 +170,7 @@ namespace set_basic_aspnet_mvc.Controllers
             var user = await _userService.Get(id);
             if (user == null) return RedirectToHome();
 
-            var model = UserModel.Map(user);
+            var model = Mapper.Map<UserDto, UserModel>(user);
             return View(model);
         }
     }

@@ -156,6 +156,8 @@
     <Compile Include="Controllers\LangController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Domain\DataTransferObjects\BaseDto.cs" />
+    <Compile Include="Domain\DataTransferObjects\FeedbackDto.cs" />
     <Compile Include="Domain\DataTransferObjects\UserDto.cs" />
     <Compile Include="Domain\Entities\BaseEntity.cs" />
     <Compile Include="Domain\DataTransferObjects\SearchResultDto.cs" />

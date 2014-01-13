@@ -1,7 +1,9 @@
 ﻿namespace set_basic_aspnet_mvc.Domain.DataTransferObjects
 {
-    public class UserDto
+    public class UserDto : BaseDto
     {
+        public long Id { get; set; }
+
         public string Email { get; set; }
         public string FullName { get; set; }
         public string Language { get; set; }

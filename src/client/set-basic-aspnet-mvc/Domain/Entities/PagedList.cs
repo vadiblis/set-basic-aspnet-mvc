@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using set_basic_aspnet_mvc.Domain.DataTransferObjects;
+
 namespace set_basic_aspnet_mvc.Domain.Entities
 {
-    public class PagedList<TEntity> where TEntity : BaseEntity
+    public class PagedList<TEntity> where TEntity : BaseDto
     {
         public int Number { get; set; }
         public int Size { get; set; }

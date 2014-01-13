@@ -2,6 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 
+using AutoMapper;
+
+using set_basic_aspnet_mvc.Domain.DataTransferObjects;
 using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Domain.Repositories;
 using set_basic_aspnet_mvc.Helpers;
@@ -11,12 +14,12 @@ namespace set_basic_aspnet_mvc.Domain.Services
     public interface IFeedbackService
     {
         Task<bool> AddFeedback(long userId, string userEmail, string info);
-        
-        Task<Feedback> GetFeedback(int id);
+
+        Task<FeedbackDto> GetFeedback(int id);
         
         Task<bool> SetFeedbackToReviewed(int id);
 
-        Task<PagedList<Feedback>> GetFeedbacks(int page, bool isReviewed = false);
+        Task<PagedList<FeedbackDto>> GetFeedbacks(int page, bool isReviewed = false);
     }
 
     public class FeedbackService : IFeedbackService
@@ -47,30 +50,33 @@ namespace set_basic_aspnet_mvc.Domain.Services
             return Task.FromResult(result);
         }
 
-        public Task<Feedback> GetFeedback(int id)
+        public Task<FeedbackDto> GetFeedback(int id)
         {
             if (id < 0) return null;
 
-            var feedback = _feedbackRepo.FindOne(x => x.Id == id);
-            return Task.FromResult(feedback);
+            var item = _feedbackRepo.FindOne(x => x.Id == id);
+
+            var result = Mapper.Map<Feedback, FeedbackDto>(item);
+
+            return Task.FromResult(result);
         }
         
         public async Task<bool> SetFeedbackToReviewed(int id)
         {
-            var feedback = await GetFeedback(id);
-            if (feedback == null) return await Task.FromResult(false);
+            var item = _feedbackRepo.FindOne(x => x.Id == id);
+            if (item == null) return await Task.FromResult(false);
 
-            feedback.IsReviewed = true;
-            feedback.ReviewedAt = DateTime.Now;
+            item.IsReviewed = true;
+            item.ReviewedAt = DateTime.Now;
 
-            _feedbackRepo.Update(feedback);
+            _feedbackRepo.Update(item);
 
             var result = _feedbackRepo.SaveChanges();
 
             return await Task.FromResult(result);
         }
 
-        public Task<PagedList<Feedback>> GetFeedbacks(int pageNumber, bool isReviewed = false)
+        public Task<PagedList<FeedbackDto>> GetFeedbacks(int pageNumber, bool isReviewed = false)
         {
             if (pageNumber < 1)
             {
@@ -79,13 +85,15 @@ namespace set_basic_aspnet_mvc.Domain.Services
 
             pageNumber--;
 
-            var items = _feedbackRepo.FindAll(x => x.IsReviewed == isReviewed);
+            var items = _feedbackRepo.FindAll();
 
             long totalCount = items.Count();
 
             items = items.OrderByDescending(x => x.Id).Skip(ConstHelper.PageSize * pageNumber).Take(ConstHelper.PageSize);
 
-            return Task.FromResult(new PagedList<Feedback>(pageNumber, ConstHelper.PageSize, totalCount, items.ToList()));
+            var result = items.Select(Mapper.Map<Feedback, FeedbackDto>).ToList();
+
+            return Task.FromResult(new PagedList<FeedbackDto>(pageNumber, ConstHelper.PageSize, totalCount, result));
         }
     }
 }

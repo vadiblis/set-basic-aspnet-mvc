@@ -1,11 +1,12 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using System.Web.UI.WebControls;
+
 using Moq;
 using NUnit.Framework;
 
 using set_basic_aspnet_mvc.Controllers;
+using set_basic_aspnet_mvc.Domain.DataTransferObjects;
 using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Domain.Services;
 using set_basic_aspnet_mvc.Models;
@@ -103,7 +104,7 @@ namespace set_basic_aspnet_mvc.test.Controllers
             userService.Setup(x => x.Authenticate(email, password))
                     .Returns(() => Task.FromResult(true));
             userService.Setup(x => x.GetByEmail(email))
-                    .Returns(() => Task.FromResult(new User { Id = id, FullName = fullName, Email = email, RoleId = SetRole.User.Value }));
+                    .Returns(() => Task.FromResult(new UserDto { Id = id, FullName = fullName, Email = email, RoleId = SetRole.User.Value }));
 
             var formsAuthenticationService = new Mock<IFormsAuthenticationService>();
             formsAuthenticationService.Setup(x => x.SignIn(id, fullName, email, SetRole.User.Value, true));
