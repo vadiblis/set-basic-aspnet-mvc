@@ -14,8 +14,8 @@ namespace set_basic_aspnet_mvc.test.Builders
         public AdminControllerBuilder()
         {
             _formAuthenticationService = null;
-            _userService = new Mock<IUserService>().Object;
-            _feedbackService = new Mock<IFeedbackService>().Object;
+            _userService = null;
+            _feedbackService = null;
         }
 
         internal AdminControllerBuilder WithFormsAuthenticationService(IFormsAuthenticationService formAuthenticationService)

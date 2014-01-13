@@ -15,7 +15,7 @@ using set_basic_aspnet_mvc.test.Builders;
 
 namespace set_basic_aspnet_mvc.test.Controllers
 {
-    public class UserControllerTests
+    public class UserControllerTests : BaseTests
     {
         [Test]
         public void new_should_return_with_user_model()

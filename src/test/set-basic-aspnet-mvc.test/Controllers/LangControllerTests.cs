@@ -10,7 +10,7 @@ using System.Web;
 
 namespace set_basic_aspnet_mvc.test.Controllers
 {
-    public class LangControllerTests
+    public class LangControllerTests : BaseTests
     {
         [Test]
         public void change_should_add_lang_cookie()

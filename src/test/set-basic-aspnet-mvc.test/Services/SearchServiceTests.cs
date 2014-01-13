@@ -5,14 +5,16 @@ using System.Collections.Generic;
 
 using Moq;
 using NUnit.Framework;
+
 using set_basic_aspnet_mvc.Domain.Contracts;
 using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Domain.Repositories;
 using set_basic_aspnet_mvc.test.Builders;
+using set_basic_aspnet_mvc.test.Controllers;
 
 namespace set_basic_aspnet_mvc.test.Services
 {
-    class SearchServiceTests
+    class SearchServiceTests : BaseTests
     {
         [Test]
         public async void should_query_if_query_string_is_empty()

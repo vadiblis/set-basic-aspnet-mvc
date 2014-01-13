@@ -14,7 +14,7 @@ using set_basic_aspnet_mvc.test.TestHelpers;
 
 namespace set_basic_aspnet_mvc.test.Controllers
 {
-    public class SearchControllerTests
+    public class SearchControllerTests : BaseTests
     {
         [Test]
         public async void query_should_return_with_response_model()

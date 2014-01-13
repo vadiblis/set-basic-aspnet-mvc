@@ -12,7 +12,7 @@ namespace set_basic_aspnet_mvc.test.Builders
 
         public ReportServiceBuilder()
         {
-            _userRepository = new Mock<IRepository<User>>().Object;
+            _userRepository = null;
         }
 
         internal ReportServiceBuilder WithUserRespository(IRepository<User> userRepository)

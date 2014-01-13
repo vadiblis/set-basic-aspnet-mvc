@@ -3,15 +3,17 @@ using System.Linq.Expressions;
 
 using Moq;
 using NUnit.Framework;
+
 using set_basic_aspnet_mvc.Domain.Contracts;
 using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Domain.Repositories;
 using set_basic_aspnet_mvc.test.Builders;
+using set_basic_aspnet_mvc.test.Controllers;
 
 namespace set_basic_aspnet_mvc.test.Services
 {
     [TestFixture]
-    public class ReportServiceTests
+    public class ReportServiceTests : BaseTests
     {
         [Test]
         public async void get_total_user_count()

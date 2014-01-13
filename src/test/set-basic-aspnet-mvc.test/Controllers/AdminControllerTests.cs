@@ -6,7 +6,7 @@ using set_basic_aspnet_mvc.test.TestHelpers;
 
 namespace set_basic_aspnet_mvc.test.Controllers
 {
-    public class AdminControllerTests
+    public class AdminControllerTests : BaseTests
     {
         [Test]
         public void index_should_return_view()

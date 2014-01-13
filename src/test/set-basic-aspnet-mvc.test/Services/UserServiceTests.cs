@@ -4,16 +4,19 @@ using System.Threading;
 
 using Moq;
 using NUnit.Framework;
+
 using set_basic_aspnet_mvc.Domain.Contracts;
+using set_basic_aspnet_mvc.Domain.DataTransferObjects;
 using set_basic_aspnet_mvc.Domain.Entities;
 using set_basic_aspnet_mvc.Domain.Repositories;
 using set_basic_aspnet_mvc.test.Builders;
+using set_basic_aspnet_mvc.test.Controllers;
 
 namespace set_basic_aspnet_mvc.test.Services
 {
     [TestFixture]
-    public class UserServiceTests
-    {
+    public class UserServiceTests : BaseTests
+    { 
         [Test]
         public async void create_should_return_user_id()
         {
@@ -82,7 +85,7 @@ namespace set_basic_aspnet_mvc.test.Services
             Assert.NotNull(user);
             Assert.AreEqual(user.Email, email);
             Assert.IsInstanceOf<IUserService>(sut);
-            Assert.IsAssignableFrom<User>(user);
+            Assert.IsAssignableFrom<UserDto>(user);
 
             userRepository.Verify(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>()), Times.Once);
         }
@@ -129,7 +132,7 @@ namespace set_basic_aspnet_mvc.test.Services
             // Assert
             Assert.NotNull(user);
             Assert.IsInstanceOf<IUserService>(sut);
-            Assert.IsAssignableFrom<User>(user);
+            Assert.IsAssignableFrom<UserDto>(user);
 
             userRepository.Verify(x => x.FindOne(It.IsAny<Expression<Func<User, bool>>>()), Times.Once);
         }
